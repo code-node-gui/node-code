@@ -26,6 +26,7 @@ import { NodesContext } from "./context/NodesContext.jsx";
 import Output from "./components/Output.jsx";
 import FalseNode from "./nodes/FalseNode.jsx";
 import LoopNode from "./nodes/LoopNode.jsx";
+import EqualNode from "./nodes/EqualNode.jsx";
 
 const rfStyle = {
   backgroundColor: "#000814",
@@ -62,6 +63,7 @@ const nodeTypes = {
   TrueNode: TrueNode,
   FalseNode: FalseNode,
   Loop: LoopNode,
+  Equal: EqualNode,
 };
 
 let id = 0;
@@ -82,6 +84,7 @@ function Flow() {
     { node: <TrueNode list={true} />, type: "TrueNode" },
     { node: <FalseNode list={true} />, type: "FalseNode" },
     { node: <LoopNode list={true} />, type: "Loop" },
+    { node: <EqualNode list={true} />, type: "Equal" },
   ]);
 
 

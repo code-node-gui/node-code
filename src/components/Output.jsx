@@ -64,6 +64,12 @@ function Output() {
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "text") {
         return nodes[node].data.value;
+      } else if (nodes[node]?.type == "Loop") {
+        for (let index = 0; index < compiling(getNode(node,"times")); index++) {
+            compiling(getNode(node,"do"))
+        }
+      } else if (nodes[node]?.type == "Equal") {
+            return (compiling(getNode(node,"first")) == compiling(getNode(node,"second")) )
       } else {
         compiling(null);
       }
@@ -71,17 +77,17 @@ function Output() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       <button onClick={play} className="border rounded-sm p-2 bg-green-500">
         Start
       </button>
       <h1 className="mt-8 text-white text-xl px-3">Console</h1>
-      <div className="py-2">
+      <div className="py-2 flex-1  overflow-auto">
         {result.map((line, key) => {
           return (
-            <p key={key} className="text-green-500 px-3 ">
+            <div key={key} className="text-green-500 px-3 ">
               {">> " + line}
-            </p>
+            </div>
           );
         })}
       </div>
