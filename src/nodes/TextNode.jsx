@@ -1,14 +1,20 @@
 
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
+import { NodesContext } from '../context/NodesContext';
 const handleStyle = { top: 10 };
 
-function TextNode({ data, isConnectable ,list}) {
+function TextNode({ data , isConnectable ,list}) {
     const [text, setText ]=useState('')
-  const onChange = useCallback((evt) => {
-    console.log(evt.target.value);
-  }, []);
+    const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
+
+    useEffect(() => {
+      if(!list){
+        data.onChange(text,data.id)
+      }
+    }, [text])
+    
 
   return (
     <div className="  hover:scale-[1.025] duration-150  p-2 shadow-lg rounded-md flex bg-[#00356650] backdrop-blur-sm border border-[#fff5]">

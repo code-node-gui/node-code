@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 
-function TrueNode({ data, isConnectable ,list}) {
+function FalseNode({ data, isConnectable ,list}) {
 
   return (
     <div className="  hover:scale-[1.025] duration-150  p-2 shadow-lg rounded-full px-4 flex bg-[#00356650] backdrop-blur-sm border border-green-400">
@@ -18,4 +18,4 @@ function TrueNode({ data, isConnectable ,list}) {
   );
 }
 
-export default TrueNode;
+export default FalseNode;

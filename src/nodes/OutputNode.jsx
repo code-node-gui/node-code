@@ -14,7 +14,10 @@ function OutputNode({ data, isConnectable , list}) {
         <label htmlFor="condition" className='text-sm text-[#3a86ff] flex items-center gap-1'>output <ForwardRoundedIcon sx={{fontSize:16}}/></label>
         {
             !list&&
-        <Handle className='' type="source" position={Position.Right}  isConnectable={isConnectable} />
+            <>
+        <Handle className='' type="source" position={Position.Right} id="value" isConnectable={isConnectable} />
+        <Handle className='' type="source" position={Position.Bottom} id="next" isConnectable={isConnectable} />
+            </>
         }
     </div>
   );

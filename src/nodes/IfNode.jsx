@@ -22,6 +22,7 @@ function IfNode({ data, isConnectable,list }) {
         <Handle  className='top-[40px] rounded-full h-3' type="source" position={Position.Right} id="condition" isConnectable={isConnectable} />
         <Handle className='top-[75px]' type="source" position={Position.Right} id="do" isConnectable={isConnectable} />
         <Handle className='top-[95px]' type="source" position={Position.Right} id="else" isConnectable={isConnectable} />
+        <Handle  type="source" position={Position.Bottom} id="next" isConnectable={isConnectable} />
   </>
 }
 

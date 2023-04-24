@@ -24,6 +24,8 @@ import StartNode from "./nodes/StartNode.jsx";
 import TrueNode from "./nodes/TrueNode.jsx";
 import { NodesContext } from "./context/NodesContext.jsx";
 import Output from "./components/Output.jsx";
+import FalseNode from "./nodes/FalseNode.jsx";
+import LoopNode from "./nodes/LoopNode.jsx";
 
 const rfStyle = {
   backgroundColor: "#000814",
@@ -48,11 +50,6 @@ const edgeOptions = {
 const connectionLineStyle = { stroke: "white" };
 
 const initialNodes = [
-  {
-    id: "start",
-    type: "Start",
-    position: { x: 10, y: 10 },
-  },
 ];
 
 // we define the nodeTypes outside of the component to prevent re-renderings
@@ -63,6 +60,8 @@ const nodeTypes = {
   text: TextNode,
   Start: StartNode,
   TrueNode: TrueNode,
+  FalseNode: FalseNode,
+  Loop: LoopNode,
 };
 
 let id = 0;
@@ -74,13 +73,43 @@ function Flow() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
+
   const [nodesArray, setNodeArray] = useState([
     { node: <StartNode list={true} />, type: "Start" },
     { node: <IfNode list={true} />, type: "If" },
     { node: <TextNode list={true} />, type: "text" },
     { node: <OutputNode list={true} />, type: "Output" },
     { node: <TrueNode list={true} />, type: "TrueNode" },
+    { node: <FalseNode list={true} />, type: "FalseNode" },
+    { node: <LoopNode list={true} />, type: "Loop" },
   ]);
+
+
+
+    const onChange = (v,id) => {
+      setNodes((nds) =>
+        nds.map((node) => {
+          if (node.id !== id) {
+            return node;
+          }
+
+          const value = v;
+
+
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              value,
+            },
+          };
+        })
+      );
+    };
+
+
+
+
 
   const onConnect = useCallback(
     (params) => setEdges((els) => addEdge(params, els)),
@@ -130,10 +159,14 @@ function Flow() {
         id: type == "Start" ? "start" : getId(),
         type,
         position,
-        data: { label: `${type} node` },
       };
 
-      setNodes((nds) => nds.concat(newNode));
+      const newTextNode={
+        ...newNode,
+        data: { onChange: onChange, text: "" ,id:newNode.id},
+      }
+
+      setNodes((nds) => nds.concat(type=="text"?newTextNode:newNode));
     },
     [reactFlowInstance]
   );
@@ -148,7 +181,7 @@ function Flow() {
       <div className="flex flex-col w-screen h-screen">
         <ReactFlowProvider>
           <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
-            <div className="w-[200px] border-r border-[#fff3] bg-[#171b26]">
+            <div className="w-[200px] border-r border-[#fff3] bg-[#0c0f18]">
               <h1 className="text-white text-2xl p-3">Nodes</h1>
 
               <div className="flex flex-col items-start">
@@ -189,10 +222,7 @@ function Flow() {
               <MiniMap zoomable pannable className="bg-gray-900" />
               <Background color="#aaa" variant={"dots"} />
             </ReactFlow>
-            <div className="w-[300px]">
-              <button className="border rounded-sm p-2 bg-green-500">
-                Start
-              </button>
+            <div className="w-[300px] bg-[#171b26]">
                 <Output/>
             </div>
           </div>
