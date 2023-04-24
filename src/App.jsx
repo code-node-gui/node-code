@@ -21,6 +21,9 @@ import TextNode from "./nodes/TextNode.jsx";
 
 import "./text-updater-node.css";
 import StartNode from "./nodes/StartNode.jsx";
+import TrueNode from "./nodes/TrueNode.jsx";
+import { NodesContext } from "./context/NodesContext.jsx";
+import Output from "./components/Output.jsx";
 
 const rfStyle = {
   backgroundColor: "#000814",
@@ -38,7 +41,7 @@ const edgeOptions = {
   animated: false,
   style: {
     stroke: "white",
-    strokeWidth: ".5px",
+    strokeWidth: "1px",
   },
 };
 
@@ -49,7 +52,7 @@ const initialNodes = [
     id: "start",
     type: "Start",
     position: { x: 10, y: 10 },
-  }
+  },
 ];
 
 // we define the nodeTypes outside of the component to prevent re-renderings
@@ -59,10 +62,11 @@ const nodeTypes = {
   If: IfNode,
   text: TextNode,
   Start: StartNode,
+  TrueNode: TrueNode,
 };
 
 let id = 0;
-const getId = () => `dndnode_${id++}`;
+const getId = () => `node_${id++}`;
 
 function Flow() {
   const edgeUpdateSuccessful = useRef(true);
@@ -70,6 +74,13 @@ function Flow() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
+  const [nodesArray, setNodeArray] = useState([
+    { node: <StartNode list={true} />, type: "Start" },
+    { node: <IfNode list={true} />, type: "If" },
+    { node: <TextNode list={true} />, type: "text" },
+    { node: <OutputNode list={true} />, type: "Output" },
+    { node: <TrueNode list={true} />, type: "TrueNode" },
+  ]);
 
   const onConnect = useCallback(
     (params) => setEdges((els) => addEdge(params, els)),
@@ -111,12 +122,12 @@ function Flow() {
       }
 
       const position = reactFlowInstance.project({
-        x: event.clientX - reactFlowBounds.left-200,
+        x: event.clientX - reactFlowBounds.left - 200,
         y: event.clientY - reactFlowBounds.top,
       });
 
       const newNode = {
-        id:type=="Start"?"start":getId(),
+        id: type == "Start" ? "start" : getId(),
         type,
         position,
         data: { label: `${type} node` },
@@ -133,49 +144,30 @@ function Flow() {
   }, []);
 
   return (
-    <div className="flex flex-col w-screen h-screen">
-      <ReactFlowProvider>
-        <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
+    <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange }}>
+      <div className="flex flex-col w-screen h-screen">
+        <ReactFlowProvider>
+          <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
+            <div className="w-[200px] border-r border-[#fff3] bg-[#171b26]">
+              <h1 className="text-white text-2xl p-3">Nodes</h1>
 
-
-
-
-          <div className="w-[200px] border-r border-[#fff3] bg-[#171b26]">
-            <h1 className="text-white text-2xl p-3">Nodes</h1>
-
-            <aside>
-              <div
-                className="p-2 bg-[#fff1] border border-[#fff3] text-white m-1 rounded-md"
-                onDragStart={(event) => onDragStart(event, "Start")}
-                draggable
-              >
-                start
+              <div className="flex flex-col items-start">
+                {nodesArray.map((n, key) => {
+                  return (
+                    <div
+                      key={key}
+                      draggable
+                      onDragStart={(event) => onDragStart(event, n.type)}
+                      className="m-1"
+                    >
+                      {n.node}
+                    </div>
+                  );
+                })}
               </div>
-              <div
-                className="p-2 bg-[#fff1] border border-[#fff3] text-white m-1 rounded-md"
-                onDragStart={(event) => onDragStart(event, "If")}
-                draggable
-              >
-                if
-              </div>
-              <div
-                className="p-2 bg-[#fff1] border border-[#fff3] text-white m-1 rounded-md"
-                onDragStart={(event) => onDragStart(event, "Output")}
-                draggable
-              >
-                output
-              </div>
-              <div
-                className="p-2 bg-[#fff1] border border-[#fff3] text-white m-1 rounded-md"
-                onDragStart={(event) => onDragStart(event, "text")}
-                draggable
-              >
-                text
-              </div>
-            </aside>
-          </div>
+            </div>
             <ReactFlow
-            className="flex-1"
+              className="flex-1"
               nodes={nodes}
               edges={edges}
               onNodesChange={onNodesChange}
@@ -195,11 +187,18 @@ function Flow() {
             >
               <Controls className="bg-white" />
               <MiniMap zoomable pannable className="bg-gray-900" />
-              <Background color="#222" variant={"dots"} />
+              <Background color="#aaa" variant={"dots"} />
             </ReactFlow>
-        </div>
-      </ReactFlowProvider>
-    </div>
+            <div className="w-[300px]">
+              <button className="border rounded-sm p-2 bg-green-500">
+                Start
+              </button>
+                <Output/>
+            </div>
+          </div>
+        </ReactFlowProvider>
+      </div>
+    </NodesContext.Provider>
   );
 }
 
