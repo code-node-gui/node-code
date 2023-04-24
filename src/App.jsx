@@ -1,18 +1,101 @@
-import React from 'react';
-import ReactFlow from 'reactflow';
-
+import { useCallback, useState } from 'react';
+import ReactFlow, { Background, Controls, MiniMap, addEdge, applyEdgeChanges,SelectionMode, applyNodeChanges } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-const initialNodes = [
-  { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
-  { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
-];
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
+import TextUpdaterNode from './TextUpdaterNode.jsx';
+import IfNode from './IfNode.jsx';
 
-export default function App() {
+import './text-updater-node.css';
+
+const rfStyle = {
+  backgroundColor: '#000814',
+};
+
+
+const panOnDrag = [1, 2];
+
+// const initialNodes = [
+//   // { id: 'node-3', type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: 123 } },
+//   { id: '1', type: 'ifNode', position: { x: 0, y: 0 }, data: { value: 123 } },
+//   { id: '2', type: 'ifNode', position: { x: 0, y: 0 }, data: { value: 123 } },
+// ];
+
+const edgeOptions = {
+  animated: true,
+  style: {
+    stroke: 'white',
+  },
+};
+
+const connectionLineStyle = { stroke: 'white' };
+
+const initialNodes = [
+  {
+    id: 'B',
+    type: 'ifNode',
+    data: { label: 'child node 1' },
+    position: { x: 10, y: 10 },
+  },
+  {
+    id: 'C',
+    data: { label: 'child node 2' },
+    position: { x: 10, y: 90 },
+    type: 'ifNode',
+  },
+];
+
+// we define the nodeTypes outside of the component to prevent re-renderings
+// you could also use useMemo inside the component
+const nodeTypes = { textUpdater: TextUpdaterNode,ifNode:IfNode};
+
+  const initialEdges = [
+    { id: 'e2-3', source: '2', target: '1', animated: true },
+  ];
+
+function Flow() {
+  const [nodes, setNodes] = useState(initialNodes);
+  const [edges, setEdges] = useState([]);
+
+  const onNodesChange = useCallback(
+    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+    [setNodes]
+  );
+  const onEdgesChange = useCallback(
+    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+    [setEdges]
+  );
+  const onConnect = useCallback(
+    (connection) => setEdges((eds) => addEdge(connection, eds)),
+    [setEdges]
+  );
+
+
+
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
-      <ReactFlow nodes={initialNodes} edges={initialEdges} />
+    <div className='flex w-screen h-screen'>
+      <div className="w-[200px]">
+
+      </div>
+    <div className='flex-1' >
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      nodeTypes={nodeTypes}
+      fitView
+      connectionLineStyle={connectionLineStyle}
+      defaultEdgeOptions={edgeOptions}
+      style={rfStyle}
+    >
+        <Controls className='bg-white' />
+        <MiniMap zoomable pannable className='bg-gray-900'/>
+        <Background color="#222" variant={"dots"} />
+    </ReactFlow>
+    </div>
     </div>
   );
 }
+
+export default Flow;
