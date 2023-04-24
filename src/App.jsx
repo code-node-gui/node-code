@@ -1,16 +1,25 @@
-import { useCallback, useState } from 'react';
-import ReactFlow, { Background, Controls, MiniMap, addEdge, applyEdgeChanges,SelectionMode, applyNodeChanges } from 'reactflow';
-import 'reactflow/dist/style.css';
+import { useCallback, useState } from "react";
+import ReactFlow, {
+  Background,
+  Controls,
+  MiniMap,
+  addEdge,
+  applyEdgeChanges,
+  SelectionMode,
+  applyNodeChanges,
+} from "reactflow";
+import "reactflow/dist/style.css";
 
-import TextUpdaterNode from './TextUpdaterNode.jsx';
-import IfNode from './IfNode.jsx';
+import TextUpdaterNode from "./TextUpdaterNode.jsx";
+import IfNode from "./nodes/IfNode.jsx";
+import OutputNode from "./nodes/OutputNode.jsx";
+import TextNode from "./nodes/TextNode.jsx";
 
-import './text-updater-node.css';
+import "./text-updater-node.css";
 
 const rfStyle = {
-  backgroundColor: '#000814',
+  backgroundColor: "#000814",
 };
-
 
 const panOnDrag = [1, 2];
 
@@ -23,34 +32,35 @@ const panOnDrag = [1, 2];
 const edgeOptions = {
   animated: true,
   style: {
-    stroke: 'white',
+    stroke: "white",
   },
 };
 
-const connectionLineStyle = { stroke: 'white' };
+const connectionLineStyle = { stroke: "white" };
 
 const initialNodes = [
   {
-    id: 'B',
-    type: 'ifNode',
-    data: { label: 'child node 1' },
+    id: "A",
+    type: "If",
     position: { x: 10, y: 10 },
   },
   {
-    id: 'C',
-    data: { label: 'child node 2' },
+    id: "B",
+    type: "Output",
     position: { x: 10, y: 90 },
-    type: 'ifNode',
+  },
+  {
+    id: "c",
+    type: "text",
+    position: { x: 10, y: 90 },
   },
 ];
 
 // we define the nodeTypes outside of the component to prevent re-renderings
 // you could also use useMemo inside the component
-const nodeTypes = { textUpdater: TextUpdaterNode,ifNode:IfNode};
+const nodeTypes = { Output: OutputNode, If: IfNode, text:TextNode};
 
-  const initialEdges = [
-    { id: 'e2-3', source: '2', target: '1', animated: true },
-  ];
+const initialEdges = [{ id: "e2-3", source: "2", target: "1", animated: true }];
 
 function Flow() {
   const [nodes, setNodes] = useState(initialNodes);
@@ -69,31 +79,27 @@ function Flow() {
     [setEdges]
   );
 
-
-
   return (
-    <div className='flex w-screen h-screen'>
-      <div className="w-[200px]">
-
-      </div>
-    <div className='flex-1' >
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-      fitView
-      connectionLineStyle={connectionLineStyle}
-      defaultEdgeOptions={edgeOptions}
-      style={rfStyle}
-    >
-        <Controls className='bg-white' />
-        <MiniMap zoomable pannable className='bg-gray-900'/>
-        <Background color="#222" variant={"dots"} />
-    </ReactFlow>
-    </div>
+    <div className="flex w-screen h-screen">
+        <div className="flex-1">
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            nodeTypes={nodeTypes}
+            fitView
+            connectionLineStyle={connectionLineStyle}
+            defaultEdgeOptions={edgeOptions}
+            style={rfStyle}
+          >
+            <Controls className="bg-white" />
+            <MiniMap zoomable pannable className="bg-gray-900" />
+            <Background color="#222" variant={"dots"} />
+          </ReactFlow>
+        </div>
+        <div className="w-[300px] border-l" style={rfStyle}></div>
     </div>
   );
 }
