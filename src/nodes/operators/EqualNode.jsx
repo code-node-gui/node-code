@@ -14,8 +14,8 @@ function EqualNode({ data, isConnectable ,list}) {
             !list&&
             <>
             <Handle className='bg-green-300 border-none rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
-            <Handle className='bg-green-300 border-none rounded-lg top-3' type="source" id="first" position={Position.Right} isConnectable={isConnectable} />
-            <Handle className='bg-green-300 border-none rounded-lg top-6 ' type="source" id="second" position={Position.Right} isConnectable={isConnectable} />
+            <Handle className='bg-green-300 border-none rounded-lg ' type="source" id="first" position={Position.Top} isConnectable={isConnectable} />
+            <Handle className='bg-green-300 border-none rounded-lg ' type="source" id="second" position={Position.Bottom} isConnectable={isConnectable} />
             </>
         }
     </div>

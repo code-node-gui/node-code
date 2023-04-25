@@ -64,12 +64,26 @@ function Output() {
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "text") {
         return nodes[node].data.value;
+      } else if (nodes[node]?.type == "number") {
+        return Number(nodes[node].data.value);
       } else if (nodes[node]?.type == "Loop") {
-        for (let index = 0; index < compiling(getNode(node,"times")); index++) {
+        for (let index = 0; index < compiling(getNode(node,"times")) ; index++) {
             compiling(getNode(node,"do"))
         }
       } else if (nodes[node]?.type == "Equal") {
-            return (compiling(getNode(node,"first")) == compiling(getNode(node,"second")) )
+            return (compiling(getNode(node,"first")) === compiling(getNode(node,"second")) )
+      } else if (nodes[node]?.type == "Bigger") {
+            return (compiling(getNode(node,"first")) < compiling(getNode(node,"second")) )
+      } else if (nodes[node]?.type == "Smaller") {
+            return (compiling(getNode(node,"first")) > compiling(getNode(node,"second")) )
+      } else if (nodes[node]?.type == "Add") {
+            return (compiling(getNode(node,"first")) + compiling(getNode(node,"second")) )
+      } else if (nodes[node]?.type == "Sub") {
+            return (compiling(getNode(node,"first")) - compiling(getNode(node,"second")) )
+      } else if (nodes[node]?.type == "Mul") {
+            return (compiling(getNode(node,"first")) * compiling(getNode(node,"second")) )
+      } else if (nodes[node]?.type == "Div") {
+            return (compiling(getNode(node,"first")) / compiling(getNode(node,"second")) )
       } else {
         compiling(null);
       }

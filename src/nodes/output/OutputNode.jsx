@@ -10,7 +10,11 @@ function OutputNode({ data, isConnectable , list}) {
 
   return (
     <div className="  hover:scale-[1.025] duration-150 flex flex-col p-2 shadow-lg rounded-md bg-[#00356650] backdrop-blur-sm border border-[#fff5]">
+      {
+
+            !list&&
         <Handle className='bg-[#3a86ff] border-[#3a86ff] rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
+      }
         <label htmlFor="condition" className='text-sm text-[#3a86ff] flex items-center gap-1'>output <ForwardRoundedIcon sx={{fontSize:16}}/></label>
         {
             !list&&

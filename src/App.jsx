@@ -14,22 +14,26 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 
-import TextUpdaterNode from "./TextUpdaterNode.jsx";
-import IfNode from "./nodes/IfNode.jsx";
-import OutputNode from "./nodes/OutputNode.jsx";
-import TextNode from "./nodes/TextNode.jsx";
-
-import "./text-updater-node.css";
-import StartNode from "./nodes/StartNode.jsx";
-import TrueNode from "./nodes/TrueNode.jsx";
 import { NodesContext } from "./context/NodesContext.jsx";
+import OutputNode from "./nodes/output/OutputNode.jsx";
+import IfNode from "./nodes/control/IfNode.jsx";
+import StartNode from "./nodes/control/StartNode.jsx";
+import TextNode from "./nodes/input/TextNode.jsx";
+import NumberNode from "./nodes/input/NumberNode.jsx";
+import LoopNode from "./nodes/control/LoopNode.jsx";
+import EqualNode from "./nodes/operators/EqualNode.jsx";
+import BiggerNode from "./nodes/operators/Bigger.jsx";
+import SmallerNode from "./nodes/operators/Smaller.jsx";
+import AddNode from "./nodes/math/Add.jsx";
+import SubNode from "./nodes/math/Sub.jsx";
+import MulNode from "./nodes/math/Mul.jsx";
+import DivNode from "./nodes/math/Div.jsx";
+import TrueNode from "./nodes/operators/TrueNode.jsx";
+import FalseNode from "./nodes/operators/FalseNode.jsx";
 import Output from "./components/Output.jsx";
-import FalseNode from "./nodes/FalseNode.jsx";
-import LoopNode from "./nodes/LoopNode.jsx";
-import EqualNode from "./nodes/EqualNode.jsx";
 
 const rfStyle = {
-  backgroundColor: "#000814",
+  backgroundColor: "#112",
 };
 
 const panOnDrag = [1, 2];
@@ -59,11 +63,19 @@ const nodeTypes = {
   Output: OutputNode,
   If: IfNode,
   text: TextNode,
+  number: NumberNode,
   Start: StartNode,
   TrueNode: TrueNode,
   FalseNode: FalseNode,
   Loop: LoopNode,
   Equal: EqualNode,
+  Bigger: BiggerNode,
+  Smaller: SmallerNode,
+
+  Add: AddNode,
+  Sub: SubNode,
+  Mul: MulNode,
+  Div: DivNode,
 };
 
 let id = 0;
@@ -77,16 +89,31 @@ function Flow() {
   const reactFlowWrapper = useRef(null);
 
   const [nodesArray, setNodeArray] = useState([
-    { node: <StartNode list={true} />, type: "Start" },
-    { node: <IfNode list={true} />, type: "If" },
-    { node: <TextNode list={true} />, type: "text" },
-    { node: <OutputNode list={true} />, type: "Output" },
-    { node: <TrueNode list={true} />, type: "TrueNode" },
-    { node: <FalseNode list={true} />, type: "FalseNode" },
-    { node: <LoopNode list={true} />, type: "Loop" },
-    { node: <EqualNode list={true} />, type: "Equal" },
+    { node: <StartNode list={true} />, type: "Start",cat:"control" },
+    { node: <IfNode list={true} />, type: "If",cat:"control" },
+    { node: <TextNode list={true} />, type: "text",cat:"input" },
+    { node: <NumberNode list={true} />, type: "number",cat:"input" },
+    { node: <OutputNode list={true} />, type: "Output",cat:"output" },
+    { node: <TrueNode list={true} />, type: "TrueNode",cat:"operators" },
+    { node: <FalseNode list={true} />, type: "FalseNode",cat:"operators" },
+    { node: <LoopNode list={true} />, type: "Loop" ,cat:"control"},
+    { node: <EqualNode list={true} />, type: "Equal" , cat:"operators"},
+    { node: <BiggerNode list={true} />, type: "Bigger", cat:"operators" },
+    { node: <SmallerNode list={true} />, type: "Smaller", cat:"operators" },
+
+    { node: <AddNode list={true} />, type: "Add", cat:"math" },
+    { node: <SubNode list={true} />, type: "Sub", cat:"math" },
+    { node: <MulNode list={true} />, type: "Mul", cat:"math" },
+    { node: <DivNode list={true} />, type: "Div", cat:"math" },
   ]);
 
+  const cats = [
+    {name:"control"},
+    {name:"input"},
+    {name:"output"},
+    {name:"operators"},
+    {name:"math"},
+  ]
 
 
     const onChange = (v,id) => {
@@ -169,7 +196,7 @@ function Flow() {
         data: { onChange: onChange, text: "" ,id:newNode.id},
       }
 
-      setNodes((nds) => nds.concat(type=="text"?newTextNode:newNode));
+      setNodes((nds) => nds.concat(type=="text"||type=="number"?newTextNode:newNode));
     },
     [reactFlowInstance]
   );
@@ -184,22 +211,35 @@ function Flow() {
       <div className="flex flex-col w-screen h-screen">
         <ReactFlowProvider>
           <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
-            <div className="w-[200px] border-r border-[#fff3] bg-[#0c0f18]">
+            <div className="w-[200px] border-r border-[#fff3] bg-[#001] flex flex-col">
               <h1 className="text-white text-2xl p-3">Nodes</h1>
 
-              <div className="flex flex-col items-start">
-                {nodesArray.map((n, key) => {
-                  return (
-                    <div
-                      key={key}
-                      draggable
-                      onDragStart={(event) => onDragStart(event, n.type)}
-                      className="m-1"
-                    >
-                      {n.node}
-                    </div>
-                  );
-                })}
+              <div className="flex flex-col items-start px-3 overflow-y-auto flex-1">
+                {
+                  cats.map((cat,key1)=>{
+                    return(
+                      <div key={key1}>
+                      <h3 className="text-white my-1 mt-4">{cat.name}</h3>
+                      {
+
+                      nodesArray.filter(n=>n.cat==cat.name).map((n, key) => {
+                        return (
+                          <div
+                            key={key}
+                            draggable
+                            onDragStart={(event) => onDragStart(event, n.type)}
+                            className="my-1"
+                          >
+                            {n.node}
+                          </div>
+                        );
+                      })
+
+                      }
+                      </div>
+                    )
+                  })
+                }
               </div>
             </div>
             <ReactFlow
