@@ -34,9 +34,10 @@ import Output from "./components/Output.jsx";
 import CreateVar from "./nodes/variables/CreateVar.jsx";
 import SetVar from "./nodes/variables/SetVar.jsx";
 import GetVar from "./nodes/variables/GetVar.jsx";
+import { cats } from "./assets/cats.js";
 
 const rfStyle = {
-  backgroundColor: "#112",
+  backgroundColor: "#f0f0f0",
 };
 
 const panOnDrag = [1, 2];
@@ -50,12 +51,12 @@ const panOnDrag = [1, 2];
 const edgeOptions = {
   animated: false,
   style: {
-    stroke: "white",
+    stroke: "#333",
     strokeWidth: "1px",
   },
 };
 
-const connectionLineStyle = { stroke: "white" };
+const connectionLineStyle = { stroke: "#555" };
 
 const initialNodes = [
 ];
@@ -122,14 +123,7 @@ function Flow() {
     { node: <GetVar list={true} />, type: "GetVar",cat:"variables" },
   ]);
 
-  const cats = [
-    {name:"control"},
-    {name:"input"},
-    {name:"output"},
-    {name:"operators"},
-    {name:"math"},
-    {name:"variables"},
-  ]
+  
 
 
     const onChange = (v,id) => {
@@ -227,15 +221,15 @@ function Flow() {
       <div className="flex flex-col w-screen h-screen">
         <ReactFlowProvider>
           <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
-            <div className="w-[200px] border-r border-[#fff3] bg-[#001] flex flex-col">
-              <h1 className="text-white text-2xl p-3">Nodes</h1>
+            <div className="w-[200px] border-r border-[#fff3] bg-[#fff] flex flex-col">
+              <h1 className="text-gray-700 text-2xl p-3">Nodes</h1>
 
               <div className="flex flex-col items-start justify-start px-3 overflow-y-auto flex-1">
                 {
                   cats.map((cat,key1)=>{
                     return(
                       <div key={key1} className="flex flex-col items-start">
-                      <h3 className="text-white my-1 mt-4">{cat.name}</h3>
+                      <h3 className="text-gray-700 my-1 mt-4">{cat.name}</h3>
                       {
 
                       nodesArray.filter(n=>n.cat==cat.name).map((n, key) => {
@@ -278,10 +272,10 @@ function Flow() {
               style={rfStyle}
             >
               <Controls className="bg-white" />
-              <MiniMap zoomable pannable className="bg-gray-900" />
+              <MiniMap zoomable pannable className="bg-gray-400" />
               <Background color="#aaa" variant={"dots"} />
             </ReactFlow>
-            <div className="w-[300px] bg-[#171b26]">
+            <div className="w-[300px] bg-[#fff]">
                 <Output/>
             </div>
           </div>

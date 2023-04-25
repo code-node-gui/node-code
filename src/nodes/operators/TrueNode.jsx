@@ -4,15 +4,15 @@ import { Handle, Position } from 'reactflow';
 function FalseNode({ data, isConnectable ,list}) {
 
   return (
-    <div className="  hover:scale-[1.025] duration-150  p-2 shadow-lg rounded-full px-4 flex bg-[#00356650] backdrop-blur-sm border border-green-400">
+    <div className="  hover:scale-[1.025] duration-150  p-2 shadow-lg rounded-full px-4 flex bg-[#fffe] backdrop-blur-sm border border">
 
-        <label htmlFor="condition" className='text-sm text-green-400 flex items-center gap-1'>
+        <label htmlFor="condition" className='text-sm text-[#333] flex items-center gap-1'>
             true 
         </label>
 
         {
             !list&&
-        <Handle className='bg-green-300 border-none rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
+        <Handle className=' border-none rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
         }
     </div>
   );

@@ -112,15 +112,15 @@ var variables = []
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <button onClick={play} className="border rounded-sm p-2 bg-green-500">
+    <div className="flex flex-col h-screen items-start">
+      <button onClick={play} className="border p-2 bg-[#eee] rounded-full px-4 m-2">
         Start
       </button>
-      <h1 className="mt-8 text-white text-xl px-3">Console</h1>
+      <h1 className="mt-8   text-[#333]  text-xl px-3">Console</h1>
       <div className="py-2 flex-1  overflow-auto">
         {result.map((line, key) => {
           return (
-            <div key={key} className="text-green-500 px-3 ">
+            <div key={key} className="text-gray-600 px-3 break-all">
               {">> " + line}
             </div>
           );

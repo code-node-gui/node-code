@@ -39,15 +39,15 @@ input[type=number] {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #1c1a2e;
+  background: #ffffff;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #2c2745;
+  background: #eae7e7;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #2c2745;
+  background: #d0d0d2;
 }
