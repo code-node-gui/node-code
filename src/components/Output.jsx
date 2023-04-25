@@ -1,17 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
 import { NodesContext } from "../context/NodesContext";
-
+ 
+var Console = [];
 function Output() {
   const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
-  const [result, setResult] = useState([]);
+  const [result, setResult] = useState(["show output here"]);
+  const [resultUp, setResultUp] = useState(0);
   const getStart = () => {
     return nodes.findIndex((e) => e.id == "start");
   };
 
   const play = () => {
-    setResult([]);
+        variables=[]
+        Console=[]
     compiling(getStart());
   };
+  useEffect(()=>{
+    setResult(Console)
+  },[resultUp])
+
 
   const getNode = (node, sourceHandle) => {
     let a = edges.filter(
@@ -44,7 +51,12 @@ function Output() {
   //     }
   //   };
 
+var variables = []
   const compiling = (node) => {
+    if(nodes[node]?.type=="Start"){
+        setResult([])
+        variables=[]
+    }
     if (node != null) {
       if (nodes[node]?.type == "If") {
         if (compiling(getNode(node, "condition"))) {
@@ -60,7 +72,8 @@ function Output() {
       } else if (nodes[node]?.type == "Start") {
         return compiling(getNode(node, "start"));
       } else if (nodes[node]?.type == "Output") {
-        setResult((p) => [...p, compiling(getNode(node, "value"))]);
+        Console.push(compiling(getNode(node, "value")))
+        setResultUp(p=>p+1)
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "text") {
         return nodes[node].data.value;
@@ -84,6 +97,14 @@ function Output() {
             return (compiling(getNode(node,"first")) * compiling(getNode(node,"second")) )
       } else if (nodes[node]?.type == "Div") {
             return (compiling(getNode(node,"first")) / compiling(getNode(node,"second")) )
+      } else if (nodes[node]?.type == "CreateVar") {
+            variables.push({name:nodes[node].data.value,value:compiling(getNode(node,"value"))})
+            compiling(getNode(node, "next"));
+      } else if (nodes[node]?.type == "GetVar") {
+            return variables.filter(v=>v.name==nodes[node].data.value)[0]?.value
+      } else if (nodes[node]?.type == "SetVar") {
+            variables[variables.findIndex(v=>v.name==nodes[node].data.value)].value=compiling(getNode(node, "value"));
+            compiling(getNode(node, "next"));
       } else {
         compiling(null);
       }

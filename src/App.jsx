@@ -31,6 +31,9 @@ import DivNode from "./nodes/math/Div.jsx";
 import TrueNode from "./nodes/operators/TrueNode.jsx";
 import FalseNode from "./nodes/operators/FalseNode.jsx";
 import Output from "./components/Output.jsx";
+import CreateVar from "./nodes/variables/CreateVar.jsx";
+import SetVar from "./nodes/variables/SetVar.jsx";
+import GetVar from "./nodes/variables/GetVar.jsx";
 
 const rfStyle = {
   backgroundColor: "#112",
@@ -76,6 +79,10 @@ const nodeTypes = {
   Sub: SubNode,
   Mul: MulNode,
   Div: DivNode,
+
+  CreateVar,
+  GetVar,
+  SetVar
 };
 
 let id = 0;
@@ -91,12 +98,15 @@ function Flow() {
   const [nodesArray, setNodeArray] = useState([
     { node: <StartNode list={true} />, type: "Start",cat:"control" },
     { node: <IfNode list={true} />, type: "If",cat:"control" },
+    { node: <LoopNode list={true} />, type: "Loop" ,cat:"control"},
+
     { node: <TextNode list={true} />, type: "text",cat:"input" },
     { node: <NumberNode list={true} />, type: "number",cat:"input" },
+
     { node: <OutputNode list={true} />, type: "Output",cat:"output" },
+
     { node: <TrueNode list={true} />, type: "TrueNode",cat:"operators" },
     { node: <FalseNode list={true} />, type: "FalseNode",cat:"operators" },
-    { node: <LoopNode list={true} />, type: "Loop" ,cat:"control"},
     { node: <EqualNode list={true} />, type: "Equal" , cat:"operators"},
     { node: <BiggerNode list={true} />, type: "Bigger", cat:"operators" },
     { node: <SmallerNode list={true} />, type: "Smaller", cat:"operators" },
@@ -105,6 +115,11 @@ function Flow() {
     { node: <SubNode list={true} />, type: "Sub", cat:"math" },
     { node: <MulNode list={true} />, type: "Mul", cat:"math" },
     { node: <DivNode list={true} />, type: "Div", cat:"math" },
+
+
+    { node: <CreateVar list={true} />, type: "CreateVar",cat:"variables" },
+    { node: <SetVar list={true} />, type: "SetVar",cat:"variables" },
+    { node: <GetVar list={true} />, type: "GetVar",cat:"variables" },
   ]);
 
   const cats = [
@@ -113,6 +128,7 @@ function Flow() {
     {name:"output"},
     {name:"operators"},
     {name:"math"},
+    {name:"variables"},
   ]
 
 
@@ -196,7 +212,7 @@ function Flow() {
         data: { onChange: onChange, text: "" ,id:newNode.id},
       }
 
-      setNodes((nds) => nds.concat(type=="text"||type=="number"?newTextNode:newNode));
+      setNodes((nds) => nds.concat(type=="text"||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"?newTextNode:newNode));
     },
     [reactFlowInstance]
   );
@@ -214,11 +230,11 @@ function Flow() {
             <div className="w-[200px] border-r border-[#fff3] bg-[#001] flex flex-col">
               <h1 className="text-white text-2xl p-3">Nodes</h1>
 
-              <div className="flex flex-col items-start px-3 overflow-y-auto flex-1">
+              <div className="flex flex-col items-start justify-start px-3 overflow-y-auto flex-1">
                 {
                   cats.map((cat,key1)=>{
                     return(
-                      <div key={key1}>
+                      <div key={key1} className="flex flex-col items-start">
                       <h3 className="text-white my-1 mt-4">{cat.name}</h3>
                       {
 
