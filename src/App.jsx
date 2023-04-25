@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactFlow, {
   Background,
   Controls,
@@ -35,10 +35,20 @@ import CreateVar from "./nodes/variables/CreateVar.jsx";
 import SetVar from "./nodes/variables/SetVar.jsx";
 import GetVar from "./nodes/variables/GetVar.jsx";
 import { cats } from "./assets/cats.js";
+import Ask from "./nodes/input/Ask.jsx";
+import Display from "./nodes/output/Display.jsx";
+import Button from "./nodes/Elements/Button.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
 };
+
+function componentDidMount() {
+  // document.addEventListener('contextmenu', (e) => {
+  //   e.preventDefault();
+  // });
+};
+
 
 const panOnDrag = [1, 2];
 
@@ -54,9 +64,10 @@ const edgeOptions = {
     stroke: "#333",
     strokeWidth: "1px",
   },
+  type: 'smoothstep',
 };
 
-const connectionLineStyle = { stroke: "#555" };
+const connectionLineStyle = { stroke: "#555", className:"animated"  };
 
 const initialNodes = [
 ];
@@ -65,9 +76,14 @@ const initialNodes = [
 // you could also use useMemo inside the component
 const nodeTypes = {
   Output: OutputNode,
+  Display,
+
   If: IfNode,
+
   text: TextNode,
   number: NumberNode,
+  Ask: Ask,
+
   Start: StartNode,
   TrueNode: TrueNode,
   FalseNode: FalseNode,
@@ -83,18 +99,43 @@ const nodeTypes = {
 
   CreateVar,
   GetVar,
-  SetVar
+  SetVar,
+
+  Button,
 };
 
-let id = 0;
+let id = Math.random();
 const getId = () => `node_${id++}`;
 
 function Flow() {
   const edgeUpdateSuccessful = useRef(true);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
+
+ 
+
+  useMemo(()=>{
+    setEdges(JSON.parse(localStorage.getItem("edges"))||[])
+    setNodes(JSON.parse(localStorage.getItem("nodes"))||[])
+    componentDidMount()
+  },[])
+
+  useEffect(()=>{
+    if(nodes){
+      localStorage.setItem("nodes",JSON.stringify(nodes))
+    }
+  },[nodes])
+  useEffect(()=>{
+    if(edges){
+      localStorage.setItem("edges",JSON.stringify(edges))
+    }
+  },[edges])
+
+
+
+
 
   const [nodesArray, setNodeArray] = useState([
     { node: <StartNode list={true} />, type: "Start",cat:"control" },
@@ -103,8 +144,10 @@ function Flow() {
 
     { node: <TextNode list={true} />, type: "text",cat:"input" },
     { node: <NumberNode list={true} />, type: "number",cat:"input" },
+    // { node: <Ask list={true} />, type: "Ask",cat:"input" },
 
     { node: <OutputNode list={true} />, type: "Output",cat:"output" },
+    { node: <Display list={true} />, type: "Display",cat:"output" },
 
     { node: <TrueNode list={true} />, type: "TrueNode",cat:"operators" },
     { node: <FalseNode list={true} />, type: "FalseNode",cat:"operators" },
@@ -121,6 +164,9 @@ function Flow() {
     { node: <CreateVar list={true} />, type: "CreateVar",cat:"variables" },
     { node: <SetVar list={true} />, type: "SetVar",cat:"variables" },
     { node: <GetVar list={true} />, type: "GetVar",cat:"variables" },
+
+
+    { node: <Button list={true} />, type: "Button",cat:"elements" },
   ]);
 
   
@@ -203,10 +249,10 @@ function Flow() {
 
       const newTextNode={
         ...newNode,
-        data: { onChange: onChange, text: "" ,id:newNode.id},
+        data: { onChange: onChange , text: "" ,id:newNode.id},
       }
 
-      setNodes((nds) => nds.concat(type=="text"||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"?newTextNode:newNode));
+      setNodes((nds) => nds.concat(type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"?newTextNode:newNode));
     },
     [reactFlowInstance]
   );
@@ -270,10 +316,11 @@ function Flow() {
               connectionLineStyle={connectionLineStyle}
               defaultEdgeOptions={edgeOptions}
               style={rfStyle}
+              snapToGrid
             >
               <Controls className="bg-white" />
               <MiniMap zoomable pannable className="bg-gray-400" />
-              <Background color="#aaa" variant={"dots"} />
+              <Background color="#ddd" variant={"lines"} />
             </ReactFlow>
             <div className="w-[300px] bg-[#fff]">
                 <Output/>

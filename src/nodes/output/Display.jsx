@@ -3,7 +3,7 @@ import { Handle, Position } from 'reactflow';
 import ForwardRoundedIcon from '@mui/icons-material/ForwardRounded';
 const handleStyle = { top: 10 };
 
-function OutputNode({ data, isConnectable , list}) {
+function Display({ data, isConnectable , list}) {
   const onChange = useCallback((evt) => {
     console.log(evt.target.value);
   }, []);
@@ -15,7 +15,7 @@ function OutputNode({ data, isConnectable , list}) {
             !list&&
         <Handle className=' rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
       }
-        <label htmlFor="condition" className='text-sm text-[#333] flex items-center gap-1'>output <ForwardRoundedIcon sx={{fontSize:16}}/></label>
+        <label htmlFor="condition" className='text-sm text-[#333] flex items-center gap-1'>display <ForwardRoundedIcon sx={{fontSize:16}}/></label>
         {
             !list&&
             <>
@@ -27,4 +27,4 @@ function OutputNode({ data, isConnectable , list}) {
   );
 }
 
-export default OutputNode;
+export default Display;

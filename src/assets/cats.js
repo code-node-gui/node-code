@@ -5,4 +5,5 @@ export const cats = [
     {name:"operators"},
     {name:"math"},
     {name:"variables"},
+    {name:"elements"},
   ]

@@ -15,7 +15,10 @@ function StartNode({ data, isConnectable ,list}) {
         </label>
         {
             !list&&
+            <>
                 <Handle className='' type="source" position={Position.Right} id="start" isConnectable={isConnectable} />
+                <Handle className='' type="source" position={Position.Bottom} id="next" isConnectable={isConnectable} />
+            </>
         }
     </div>
   );

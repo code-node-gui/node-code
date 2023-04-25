@@ -9,10 +9,33 @@ function CreateVar({ data , isConnectable ,list}) {
     const [text, setText ]=useState('')
     const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
 
+    useEffect(()=>{
+      setText(data?.value)
+    },[])
+
+    const run = (v,id)=> setNodes((nds) =>
+        nds.map((node) => {
+          if (node.id !== id) {
+            return node;
+          }
+
+          const value = v;
+
+
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              value,
+            },
+          };
+        })
+      );
+
+
+
     useEffect(() => {
-      if(!list){
-        data.onChange(text,data.id)
-      }
+      run(text,data?.id)
     }, [text])
     
 
@@ -27,7 +50,7 @@ function CreateVar({ data , isConnectable ,list}) {
             </>
         }
         <p className='text-[#333] pr-2'>create</p>
-        <input style={{width:2+text.length+"ch",background:text.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
+        <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
         <p className='text-[#333] pl-2'>=</p>
     </div>
   );
