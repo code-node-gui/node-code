@@ -8,7 +8,7 @@ function StartNode({ data, isConnectable ,list}) {
   }, []);
 
   return (
-    <div className="  hover:scale-[1.025] duration-150  p-2 shadow-lg rounded-md flex bg-[#fffe] backdrop-blur-sm border ">
+    <div className="  hover:scale-[1.025] duration-150  p-2 shadow-lg rounded-xl rounded-l-full pl-4  flex bg-[#fffe] backdrop-blur-sm border ">
         <label htmlFor="condition" className='text-sm text-[#333] flex items-center gap-1'>
             start 
             <PlayArrowRoundedIcon/>

@@ -51,10 +51,17 @@ input[type=number] {
 ::-webkit-scrollbar-thumb:hover {
   background: #d0d0d2;
 }
-
+#displayRoot{
+  background-color: #eee;
+  margin: 2px;
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+}
 #displayRoot button{
   background-color: #fff;
   border: 1px solid #aaa;
   padding: 2px 8px;
   border-radius: 6px;
+  margin:1px;
 }

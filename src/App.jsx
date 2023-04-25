@@ -38,6 +38,8 @@ import { cats } from "./assets/cats.js";
 import Ask from "./nodes/input/Ask.jsx";
 import Display from "./nodes/output/Display.jsx";
 import Button from "./nodes/Elements/Button.jsx";
+import DivElm from "./nodes/Elements/Div.jsx";
+import Screen from "./nodes/output/Screen.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -102,6 +104,8 @@ const nodeTypes = {
   SetVar,
 
   Button,
+  DivElm,
+  Screen,
 };
 
 let id = Math.random();
@@ -111,6 +115,7 @@ function Flow() {
   const edgeUpdateSuccessful = useRef(true);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [display, setDisplay] = useState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
 
@@ -148,6 +153,7 @@ function Flow() {
 
     { node: <OutputNode list={true} />, type: "Output",cat:"output" },
     { node: <Display list={true} />, type: "Display",cat:"output" },
+    { node: <Screen list={true} />, type: "Screen",cat:"output" },
 
     { node: <TrueNode list={true} />, type: "TrueNode",cat:"operators" },
     { node: <FalseNode list={true} />, type: "FalseNode",cat:"operators" },
@@ -167,6 +173,7 @@ function Flow() {
 
 
     { node: <Button list={true} />, type: "Button",cat:"elements" },
+    { node: <DivElm list={true} />, type: "DivElm",cat:"elements" },
   ]);
 
   
@@ -263,7 +270,7 @@ function Flow() {
   }, []);
 
   return (
-    <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange }}>
+    <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange,display,setDisplay }}>
       <div className="flex flex-col w-screen h-screen">
         <ReactFlowProvider>
           <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
@@ -322,7 +329,7 @@ function Flow() {
               <MiniMap zoomable pannable className="bg-gray-400" />
               <Background color="#ddd" variant={"lines"} />
             </ReactFlow>
-            <div className="w-[300px] bg-[#fff]">
+            <div className="w-[400px] bg-[#fff]">
                 <Output/>
             </div>
           </div>

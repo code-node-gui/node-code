@@ -7,7 +7,7 @@ const prompt = Prompt;
 
 var Console = [];
 function Output() {
-  const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
+  const { nodes, setNodes, edges, onNodesChange , display , setDisplay } = useContext(NodesContext);
   const [result, setResult] = useState(["show output here"]);
   const [resultDisplay, setResultDisplay] = useState([]);
   const [resultUp, setResultUp] = useState(0);
@@ -15,6 +15,10 @@ function Output() {
   const getStart = () => {
     return nodes.findIndex((e) => e.id == "start");
   };
+
+  useEffect(()=>{
+    setDisplay(resultDisplay)
+  },[resultDisplay])
 
   useEffect(() => {
     if (start) {
@@ -138,23 +142,30 @@ function Output() {
           compiling(getNode(node, "first")) / compiling(getNode(node, "second"))
         );
       } else if (nodes[node]?.type == "CreateVar") {
-        variables.push({
-          name: nodes[node].data.value,
-          value: compiling(getNode(node, "value")),
-        });
+        // variables.push({
+        //   name: nodes[node].data.value,
+        //   value: compiling(getNode(node, "value")),
+        // });
+        window[nodes[node].data.value] = compiling(getNode(node, "value"))
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "GetVar") {
-        return variables.filter((v) => v.name == nodes[node].data.value)[0]
-          ?.value;
+        // return variables.filter((v) => v.name == nodes[node].data.value)[0]
+        //   ?.value;
+        return window[nodes[node].data.value]
       } else if (nodes[node]?.type == "SetVar") {
-        variables[
-          variables.findIndex((v) => v.name == nodes[node].data.value)
-        ].value = compiling(getNode(node, "value"));
+        // variables[
+        //   variables.findIndex((v) => v.name == nodes[node].data.value)
+        // ].value = compiling(getNode(node, "value"));
+        window[nodes[node].data.value]=compiling(getNode(node, "value"))
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "Ask") {
         prompt(nodes[node].data.value);
       } else if (nodes[node]?.type == "Button") {
-        return <button onClick={()=>compiling(getNode(node,'click'))} >{compiling(getNode(node, "value"))}</button>
+        return (<><button className={`  ${compiling(getNode(node,'style'))}`} key={Math.random()} onClick={()=>compiling(getNode(node,'click'))} >{String(compiling(getNode(node, "value")))}</button> {compiling(getNode(node, "next")) }</>)
+      } else if (nodes[node]?.type == "DivElm") {
+        let divType= compiling(getNode(node, "type"));
+        let divStyle= compiling(getNode(node, "style"));
+        return(<><div key={Math.random()} className={` ${divType || "" } ${divStyle}`} >{compiling(getNode(node, "value"))}</div>{ compiling(getNode(node, "next"))}</> )
       } else {
         compiling(null);
       }
@@ -177,7 +188,7 @@ function Output() {
         >
           {
             resultDisplay.length > 0 && 
-            resultDisplay?.map((e,key)=><Fragment key={key}> {e} </Fragment>)
+            resultDisplay
           }
         </div>
       </div>
