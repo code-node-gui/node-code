@@ -153,7 +153,7 @@ function Flow() {
 
     { node: <OutputNode list={true} />, type: "Output",cat:"output" },
     { node: <Display list={true} />, type: "Display",cat:"output" },
-    { node: <Screen list={true} />, type: "Screen",cat:"output" },
+    // { node: <Screen list={true} />, type: "Screen",cat:"output" },
 
     { node: <TrueNode list={true} />, type: "TrueNode",cat:"operators" },
     { node: <FalseNode list={true} />, type: "FalseNode",cat:"operators" },
@@ -272,8 +272,9 @@ function Flow() {
   return (
     <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange,display,setDisplay }}>
       <div className="flex flex-col w-screen h-screen">
-        <ReactFlowProvider>
+        <ReactFlowProvider >
           <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
+
             <div className="w-[200px] border-r border-[#fff3] bg-[#fff] flex flex-col">
               <h1 className="text-gray-700 text-2xl p-3">Nodes</h1>
 
