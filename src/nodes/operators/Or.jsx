@@ -6,7 +6,7 @@ function Or({ data, isConnectable ,list}) {
   return (
     <div className="  hover:scale-[1.025] duration-150  p-1 shadow-lg rounded-md px-4 flex bg-[#fffe] backdrop-blur-sm border ">
 
-        <label htmlFor="condition" className='text-xl text-[#333] flex items-center gap-1'>
+        <label htmlFor="condition" className=' text-[#333] flex items-center gap-1'>
           or
         </label>
 

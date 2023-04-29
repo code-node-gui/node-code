@@ -2,42 +2,42 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import { NodesContext } from "../context/NodesContext";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 
-
 var Console = [];
 function Output() {
-  const { nodes, setNodes, edges, onNodesChange , display , setDisplay } = useContext(NodesContext);
+  const { nodes, setNodes, edges, onNodesChange, display, setDisplay } =
+    useContext(NodesContext);
   const [result, setResult] = useState(["show output here"]);
   const [resultDisplay, setResultDisplay] = useState([]);
   const [resultUp, setResultUp] = useState(0);
-  const [start,setStart]=useState(false)
+  const [start, setStart] = useState(false);
   const getStart = () => {
     return nodes.findIndex((e) => e.id == "start");
   };
 
-  useEffect(()=>{
-    setDisplay(resultDisplay)
-  },[resultDisplay])
+  useEffect(() => {
+    setDisplay(resultDisplay);
+  }, [resultDisplay]);
 
   useEffect(() => {
     if (start) {
-    variables = [];
-    Console=[]
-    setResult(Console);
-    setResultDisplay("")
-    compiling(getStart());
-    }
-  }, [nodes,start]);
-
-  useEffect(()=>{
-    if (start) {
-    setResult(Console)
-    }else{
       variables = [];
-      setResultDisplay("")
-      Console=[]
-      setResult([])
+      Console = [];
+      setResult(Console);
+      setResultDisplay("");
+      compiling(getStart());
     }
-  },[resultUp,start])
+  }, [nodes, start]);
+
+  useEffect(() => {
+    if (start) {
+      setResult(Console);
+    } else {
+      variables = [];
+      setResultDisplay("");
+      Console = [];
+      setResult([]);
+    }
+  }, [resultUp, start]);
 
   const getNode = (node, sourceHandle) => {
     let a = edges.filter(
@@ -71,7 +71,7 @@ function Output() {
   //   };
 
   var variables = [];
-  const compiling =  (node) => {
+  const compiling = (node) => {
     if (nodes[node]?.type == "Start") {
       setResult([]);
       variables = [];
@@ -96,7 +96,7 @@ function Output() {
         setResultUp((p) => p + 1);
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "Display") {
-        setResultDisplay(p=>[...p,compiling(getNode(node, "value"))]);
+        setResultDisplay((p) => [...p, compiling(getNode(node, "value"))]);
         setResultUp((p) => p + 1);
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "text") {
@@ -141,44 +141,94 @@ function Output() {
           compiling(getNode(node, "first")) / compiling(getNode(node, "second"))
         );
       } else if (nodes[node]?.type == "And") {
-        console.log((compiling(getNode(node, "first"))) && (compiling(getNode(node, "second"))))
+        console.log(
+          compiling(getNode(node, "first")) &&
+            compiling(getNode(node, "second"))
+        );
         return (
-          (compiling(getNode(node, "first"))||false) && (compiling(getNode(node, "second"))||false)
+          (compiling(getNode(node, "first")) || false) &&
+          (compiling(getNode(node, "second")) || false)
         );
       } else if (nodes[node]?.type == "Or") {
-        console.log((compiling(getNode(node, "first"))) || (compiling(getNode(node, "second"))))
+        console.log(
+          compiling(getNode(node, "first")) ||
+            compiling(getNode(node, "second"))
+        );
         return (
-          (compiling(getNode(node, "first"))||false) || (compiling(getNode(node, "second"))||false)
+          compiling(getNode(node, "first")) ||
+          false ||
+          compiling(getNode(node, "second")) ||
+          false
         );
       } else if (nodes[node]?.type == "Not") {
-        return (
-          !compiling(getNode(node, "first")) 
-        );
+        return !compiling(getNode(node, "first"));
       } else if (nodes[node]?.type == "CreateVar") {
         // variables.push({
         //   name: nodes[node].data.value,
         //   value: compiling(getNode(node, "value")),
         // });
-        window[nodes[node].data.value] = compiling(getNode(node, "value"))
+        window[nodes[node].data.value] = compiling(getNode(node, "value"));
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "GetVar") {
         // return variables.filter((v) => v.name == nodes[node].data.value)[0]
         //   ?.value;
-        return window[nodes[node].data.value]
+        return window[nodes[node].data.value];
       } else if (nodes[node]?.type == "SetVar") {
         // variables[
         //   variables.findIndex((v) => v.name == nodes[node].data.value)
         // ].value = compiling(getNode(node, "value"));
-        window[nodes[node].data.value]=compiling(getNode(node, "value"))
+        window[nodes[node].data.value] = compiling(getNode(node, "value"));
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "Ask") {
         return prompt(nodes[node].data.value);
       } else if (nodes[node]?.type == "Button") {
-        return (<><button className={`  ${compiling(getNode(node,'style'))}`} key={Math.random()} onClick={()=>compiling(getNode(node,'click'))} >{String(compiling(getNode(node, "value")))}</button> {compiling(getNode(node, "next")) }</>)
+        return (
+          <>
+            <button
+              id={compiling(getNode(node, "name"))}
+              className={`  ${compiling(getNode(node, "style"))}`}
+              key={Math.random()}
+              onClick={() => compiling(getNode(node, "click"))}
+            >
+              {String(compiling(getNode(node, "value")))}
+            </button>{" "}
+            {compiling(getNode(node, "next"))}
+          </>
+        );
       } else if (nodes[node]?.type == "DivElm") {
-        let divType= compiling(getNode(node, "type"));
-        let divStyle= compiling(getNode(node, "style"));
-        return(<><div key={Math.random()} className={` ${divType || "" } ${divStyle}`} >{compiling(getNode(node, "value"))}</div>{ compiling(getNode(node, "next"))}</> )
+        let divType = compiling(getNode(node, "type"));
+        let divStyle = compiling(getNode(node, "style"));
+        return (
+          <Fragment key={Math.random()}>
+            <div className={` ${divType || ""} ${divStyle}`}>
+              {compiling(getNode(node, "value"))}
+            </div>
+            {compiling(getNode(node, "next"))}
+          </Fragment>
+        );
+      } else if (nodes[node]?.type == "SetText") {
+        window.document.getElementById(nodes[node]?.data?.value).textContent =
+          compiling(getNode(node, "text"));
+        compiling(getNode(node, "next"));
+      } else if (nodes[node]?.type == "Input") {
+        return (
+          <>
+            <input
+              id={compiling(getNode(node, "name"))}
+              className={`  ${compiling(getNode(node, "style"))}`}
+              key={Math.random()}
+              onChange={() => compiling(getNode(node, "change"))}
+              value={compiling(getNode(node, "value"))}
+            />{" "}
+            {compiling(getNode(node, "next"))}
+          </>
+        );
+      } else if (nodes[node]?.type == "SetValue") {
+        window.document.getElementById(nodes[node]?.data?.value).value =
+          compiling(getNode(node, "value"));
+        compiling(getNode(node, "next"));
+      } else if (nodes[node]?.type == "GetValue") {
+        return window.document.getElementById(nodes[node]?.data?.value).value;
       } else {
         compiling(null);
       }
@@ -187,22 +237,20 @@ function Output() {
   return (
     <div className="flex flex-col h-screen items-start">
       <button
-        onClick={()=>setStart(s=>!s)}
+        onClick={() => {
+          setStart((s) => !s);
+        }}
         className="border flex items-center gap-1 duration-150 hover:px-5 hover:gap-2 p-2 bg-[#eee] rounded-full px-4 m-2"
       >
-        {start?"stop":"start"}
+        {start ? "stop" : "start"}
         <PlayArrowRoundedIcon />
       </button>
-      <h1 className="mt-8   text-[#333]  text-xl px-3">Output</h1>
+      <h1 id="out" className="mt-8   text-[#333]  text-xl px-3">
+        Output
+      </h1>
       <div className="py-2 flex-1  overflow-auto w-full">
-        <div
-          className="text-gray-600 px-3 break-all"
-          id="displayRoot"
-        >
-          {
-            resultDisplay.length > 0 && 
-            resultDisplay
-          }
+        <div className="text-gray-600 px-3 break-all" id="displayRoot">
+          {resultDisplay.length > 0 && resultDisplay}
         </div>
       </div>
       <h1 className="mt-8   text-[#333]  text-xl px-3">Console</h1>

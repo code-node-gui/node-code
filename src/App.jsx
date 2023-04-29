@@ -43,6 +43,10 @@ import Screen from "./nodes/output/Screen.jsx";
 import And from "./nodes/operators/And.jsx";
 import Or from "./nodes/operators/Or.jsx";
 import Not from "./nodes/operators/Not.jsx";
+import SetText from "./nodes/control/SetText.jsx";
+import Input from "./nodes/Elements/Input.jsx";
+import SetValue from "./nodes/control/SetValue.jsx";
+import GetValue from "./nodes/control/GetValue.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -96,6 +100,9 @@ const nodeTypes = {
   Equal: EqualNode,
   Bigger: BiggerNode,
   Smaller: SmallerNode,
+  SetText,
+  SetValue,
+  GetValue,
 
   Add: AddNode,
   Sub: SubNode,
@@ -111,6 +118,7 @@ const nodeTypes = {
   Button,
   DivElm,
   Screen,
+  Input,
 };
 
 let id = Math.random();
@@ -151,6 +159,9 @@ function Flow() {
     { node: <StartNode list={true} />, type: "Start",cat:"control" },
     { node: <IfNode list={true} />, type: "If",cat:"control" },
     { node: <LoopNode list={true} />, type: "Loop" ,cat:"control"},
+    { node: <SetText list={true} />, type: "SetText" ,cat:"control"},
+    { node: <SetValue list={true} />, type: "SetValue" ,cat:"control"},
+    { node: <GetValue list={true} />, type: "GetValue" ,cat:"control"},
 
     { node: <TextNode list={true} />, type: "text",cat:"input" },
     { node: <NumberNode list={true} />, type: "number",cat:"input" },
@@ -182,6 +193,7 @@ function Flow() {
 
     { node: <Button list={true} />, type: "Button",cat:"elements" },
     { node: <DivElm list={true} />, type: "DivElm",cat:"elements" },
+    { node: <Input list={true} />, type: "Input",cat:"elements" },
   ]);
 
   
@@ -267,7 +279,7 @@ function Flow() {
         data: { onChange: onChange , text: "" ,id:newNode.id},
       }
 
-      setNodes((nds) => nds.concat(type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"?newTextNode:newNode));
+      setNodes((nds) => nds.concat(type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"||type=="SetText"||type=="SetValue"||type=="GetValue"?newTextNode:newNode));
     },
     [reactFlowInstance]
   );
@@ -283,7 +295,7 @@ function Flow() {
         <ReactFlowProvider >
           <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
 
-            <div className="w-[200px] border-r border-[#fff3] bg-[#fff] flex flex-col">
+            <div className="w-[250px] border-r border-[#fff3] bg-[#fff] flex flex-col">
               <h1 className="text-gray-700 text-2xl p-3">Nodes</h1>
 
               <div className="flex flex-col items-start justify-start px-3 overflow-y-auto flex-1">

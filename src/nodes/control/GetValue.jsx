@@ -3,11 +3,11 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
 import { NodesContext } from '../../context/NodesContext';
-const handleStyle = { top: 10 };
 
-function CreateVar({ data , isConnectable ,list}) {
+function GetValue({ data , isConnectable ,list}) {
     const [text, setText ]=useState('')
     const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
+
 
     useEffect(()=>{
       setText(data?.value)
@@ -44,16 +44,13 @@ function CreateVar({ data , isConnectable ,list}) {
         {
             !list&&
             <>
-        <Handle className='  rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
-        <Handle className='  rounded-lg ' type="source" id="value" position={Position.Right} isConnectable={isConnectable} />
-        <Handle className='  rounded-lg ' type="source" id="next" position={Position.Bottom} isConnectable={isConnectable} />
+        <Handle className='rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
             </>
         }
-        <label className='text-[#333] pr-2'>create</label>
-        <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
-        <label className='text-[#333] pl-2'>=</label>
+        <p className='text-[#333] pr-2'>get value of </p>
+        <input style={{width:2+text?.length+"ch"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-sm bg-[#eee] px-2 outline-none   text-[#333] '/>
     </div>
   );
 }
 
-export default CreateVar;
+export default GetValue;
