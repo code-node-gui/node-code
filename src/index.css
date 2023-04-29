@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;800;900&family=Courier+Prime:wght@400;700&display=swap');
 
 *{
     font-family: 'Barlow', sans-serif;

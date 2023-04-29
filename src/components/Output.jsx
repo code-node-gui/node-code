@@ -2,8 +2,6 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import { NodesContext } from "../context/NodesContext";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 
-import { Prompt } from "prompt-sync";
-const prompt = Prompt;
 
 var Console = [];
 function Output() {
@@ -72,7 +70,7 @@ function Output() {
   //   };
 
   var variables = [];
-  const compiling = (node) => {
+  const compiling = async (node) => {
     if (nodes[node]?.type == "Start") {
       setResult([]);
       variables = [];
@@ -159,7 +157,7 @@ function Output() {
         window[nodes[node].data.value]=compiling(getNode(node, "value"))
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "Ask") {
-        prompt(nodes[node].data.value);
+        return prompt(nodes[node].data.value);
       } else if (nodes[node]?.type == "Button") {
         return (<><button className={`  ${compiling(getNode(node,'style'))}`} key={Math.random()} onClick={()=>compiling(getNode(node,'click'))} >{String(compiling(getNode(node, "value")))}</button> {compiling(getNode(node, "next")) }</>)
       } else if (nodes[node]?.type == "DivElm") {
