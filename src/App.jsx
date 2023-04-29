@@ -40,6 +40,9 @@ import Display from "./nodes/output/Display.jsx";
 import Button from "./nodes/Elements/Button.jsx";
 import DivElm from "./nodes/Elements/Div.jsx";
 import Screen from "./nodes/output/Screen.jsx";
+import And from "./nodes/operators/And.jsx";
+import Or from "./nodes/operators/Or.jsx";
+import Not from "./nodes/operators/Not.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -103,6 +106,8 @@ const nodeTypes = {
   GetVar,
   SetVar,
 
+  And,Or,Not,
+
   Button,
   DivElm,
   Screen,
@@ -160,6 +165,9 @@ function Flow() {
     { node: <EqualNode list={true} />, type: "Equal" , cat:"operators"},
     { node: <BiggerNode list={true} />, type: "Bigger", cat:"operators" },
     { node: <SmallerNode list={true} />, type: "Smaller", cat:"operators" },
+    { node: <And list={true} />, type: "And", cat:"operators" },
+    { node: <Or list={true} />, type: "Or", cat:"operators" },
+    { node: <Not list={true} />, type: "Not", cat:"operators" },
 
     { node: <AddNode list={true} />, type: "Add", cat:"math" },
     { node: <SubNode list={true} />, type: "Sub", cat:"math" },

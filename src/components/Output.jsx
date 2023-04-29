@@ -21,6 +21,7 @@ function Output() {
   useEffect(() => {
     if (start) {
     variables = [];
+    Console=[]
     setResult(Console);
     setResultDisplay("")
     compiling(getStart());
@@ -70,7 +71,7 @@ function Output() {
   //   };
 
   var variables = [];
-  const compiling = async (node) => {
+  const compiling =  (node) => {
     if (nodes[node]?.type == "Start") {
       setResult([]);
       variables = [];
@@ -138,6 +139,20 @@ function Output() {
       } else if (nodes[node]?.type == "Div") {
         return (
           compiling(getNode(node, "first")) / compiling(getNode(node, "second"))
+        );
+      } else if (nodes[node]?.type == "And") {
+        console.log((compiling(getNode(node, "first"))) && (compiling(getNode(node, "second"))))
+        return (
+          (compiling(getNode(node, "first"))||false) && (compiling(getNode(node, "second"))||false)
+        );
+      } else if (nodes[node]?.type == "Or") {
+        console.log((compiling(getNode(node, "first"))) || (compiling(getNode(node, "second"))))
+        return (
+          (compiling(getNode(node, "first"))||false) || (compiling(getNode(node, "second"))||false)
+        );
+      } else if (nodes[node]?.type == "Not") {
+        return (
+          !compiling(getNode(node, "first")) 
         );
       } else if (nodes[node]?.type == "CreateVar") {
         // variables.push({
