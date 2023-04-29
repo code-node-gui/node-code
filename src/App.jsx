@@ -47,6 +47,9 @@ import SetText from "./nodes/control/SetText.jsx";
 import Input from "./nodes/Elements/Input.jsx";
 import SetValue from "./nodes/control/SetValue.jsx";
 import GetValue from "./nodes/control/GetValue.jsx";
+import Text from "./nodes/Elements/Text.jsx";
+import CreateFun from "./nodes/functions/CreateFun.jsx";
+import FireFun from "./nodes/functions/FireFun.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -119,6 +122,10 @@ const nodeTypes = {
   DivElm,
   Screen,
   Input,
+  Text,
+
+  CreateFun,
+  FireFun,
 };
 
 let id = Math.random();
@@ -190,10 +197,14 @@ function Flow() {
     { node: <SetVar list={true} />, type: "SetVar",cat:"variables" },
     { node: <GetVar list={true} />, type: "GetVar",cat:"variables" },
 
+    { node: <CreateFun list={true} />, type: "CreateFun",cat:"functions" },
+    { node: <FireFun list={true} />, type: "FireFun",cat:"functions" },
+
 
     { node: <Button list={true} />, type: "Button",cat:"elements" },
     { node: <DivElm list={true} />, type: "DivElm",cat:"elements" },
     { node: <Input list={true} />, type: "Input",cat:"elements" },
+    { node: <Text list={true} />, type: "Text",cat:"elements" },
   ]);
 
   
@@ -279,7 +290,7 @@ function Flow() {
         data: { onChange: onChange , text: "" ,id:newNode.id},
       }
 
-      setNodes((nds) => nds.concat(type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"||type=="SetText"||type=="SetValue"||type=="GetValue"?newTextNode:newNode));
+      setNodes((nds) => nds.concat(type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"||type=="SetText"||type=="SetValue"||type=="GetValue" ||type=="CreateFun"||type=="FireFun" ?newTextNode:newNode));
     },
     [reactFlowInstance]
   );

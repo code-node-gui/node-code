@@ -42,9 +42,14 @@ function Output() {
   const getNode = (node, sourceHandle) => {
     let a = edges.filter(
       (edge) =>
-        edge.source == nodes[node].id && edge.sourceHandle == sourceHandle
+        edge?.source == nodes[node]?.id && edge?.sourceHandle == sourceHandle
     )[0]?.target;
     return nodes.findIndex((n) => n.id == a);
+  };
+
+  const fireFunction = (name) => {
+    let a = nodes.findIndex(node=>node?.data?.value==name&&node.type=="CreateFun")
+    compiling(getNode(a,"value"))
   };
 
   //   const compiling = (node) => {
@@ -183,7 +188,7 @@ function Output() {
         return prompt(nodes[node].data.value);
       } else if (nodes[node]?.type == "Button") {
         return (
-          <>
+          <Fragment key={Math.random()}>
             <button
               id={compiling(getNode(node, "name"))}
               className={`  ${compiling(getNode(node, "style"))}`}
@@ -193,7 +198,7 @@ function Output() {
               {String(compiling(getNode(node, "value")))}
             </button>{" "}
             {compiling(getNode(node, "next"))}
-          </>
+          </Fragment>
         );
       } else if (nodes[node]?.type == "DivElm") {
         let divType = compiling(getNode(node, "type"));
@@ -212,7 +217,7 @@ function Output() {
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "Input") {
         return (
-          <>
+          <Fragment key={Math.random()}>
             <input
               id={compiling(getNode(node, "name"))}
               className={`  ${compiling(getNode(node, "style"))}`}
@@ -221,7 +226,7 @@ function Output() {
               value={compiling(getNode(node, "value"))}
             />{" "}
             {compiling(getNode(node, "next"))}
-          </>
+          </Fragment>
         );
       } else if (nodes[node]?.type == "SetValue") {
         window.document.getElementById(nodes[node]?.data?.value).value =
@@ -229,6 +234,22 @@ function Output() {
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "GetValue") {
         return window.document.getElementById(nodes[node]?.data?.value).value;
+      } else if (nodes[node]?.type == "Text") {
+        return (
+          <Fragment key={Math.random()}>
+            <p
+              id={compiling(getNode(node, "name"))}
+              className={`  ${compiling(getNode(node, "style"))}`}
+            >
+              {String(compiling(getNode(node, "text")))}
+            </p>{" "}
+            {compiling(getNode(node, "next"))}
+          </Fragment>
+        );
+      } else if (nodes[node]?.type == "CreateFun") {
+          compiling(getNode(node, "value"))
+      } else if (nodes[node]?.type == "FireFun") {
+          fireFunction(nodes[node]?.data?.value)
       } else {
         compiling(null);
       }
