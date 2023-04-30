@@ -52,6 +52,11 @@ function Output() {
     compiling(getNode(a,"value"))
   };
 
+  const getStyle = (name) => {
+    let a = nodes.findIndex(node=>node?.data?.value==name&&node.type=="Style")
+    return {...compiling(getNode(a,"value"))}
+  };
+
   //   const compiling = (node) => {
   //     if (node == null) {
   //       return "";
@@ -191,7 +196,7 @@ function Output() {
           <Fragment key={Math.random()}>
             <button
               id={compiling(getNode(node, "name"))}
-              className={`  ${compiling(getNode(node, "style"))}`}
+              style={{...compiling(getNode(node, "style"))}}
               key={Math.random()}
               onClick={() => compiling(getNode(node, "click"))}
             >
@@ -205,7 +210,9 @@ function Output() {
         let divStyle = compiling(getNode(node, "style"));
         return (
           <Fragment key={Math.random()}>
-            <div className={` ${divType || ""} ${divStyle}`}>
+            <div
+              style={{...compiling(getNode(node, "style"))}}
+             >
               {compiling(getNode(node, "value"))}
             </div>
             {compiling(getNode(node, "next"))}
@@ -220,7 +227,7 @@ function Output() {
           <Fragment key={Math.random()}>
             <input
               id={compiling(getNode(node, "name"))}
-              className={`  ${compiling(getNode(node, "style"))}`}
+              style={{...compiling(getNode(node, "style"))}}
               key={Math.random()}
               onChange={() => compiling(getNode(node, "change"))}
               value={compiling(getNode(node, "value"))}
@@ -232,6 +239,13 @@ function Output() {
         window.document.getElementById(nodes[node]?.data?.value).value =
           compiling(getNode(node, "value"));
         compiling(getNode(node, "next"));
+      } else if (nodes[node]?.type == "SetStyle") {
+        let a = compiling(getNode(node, "value"))
+        let keys = Object.keys(a);  
+        keys.forEach(p=>{
+          window.document.getElementById(nodes[node]?.data?.value).style[p]=a[p]
+        })
+        compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "GetValue") {
         return window.document.getElementById(nodes[node]?.data?.value).value;
       } else if (nodes[node]?.type == "Text") {
@@ -239,7 +253,7 @@ function Output() {
           <Fragment key={Math.random()}>
             <p
               id={compiling(getNode(node, "name"))}
-              className={`  ${compiling(getNode(node, "style"))}`}
+              style={{...compiling(getNode(node, "style"))}}
             >
               {String(compiling(getNode(node, "text")))}
             </p>{" "}
@@ -250,6 +264,16 @@ function Output() {
           compiling(getNode(node, "value"))
       } else if (nodes[node]?.type == "FireFun") {
           fireFunction(nodes[node]?.data?.value)
+      } else if (nodes[node]?.type == "Style") {
+          compiling(getNode(node, "value"))
+      } else if (nodes[node]?.type == "GetStyle") {
+          return {...getStyle(nodes[node]?.data?.value),...compiling(getNode(node,"next"))}
+      } else if (nodes[node]?.type == "Background") {
+          return { backgroundColor:compiling(getNode(node, "value")) , ...compiling(getNode(node,"next"))}
+      } else if (nodes[node]?.type == "Color") {
+          return { color:compiling(getNode(node, "value")) , ...compiling(getNode(node,"next"))}
+      } else if (nodes[node]?.type == "FontSize") {
+          return { fontSize:compiling(getNode(node, "value")) , ...compiling(getNode(node,"next"))}
       } else {
         compiling(null);
       }

@@ -7,4 +7,5 @@ export const cats = [
     {name:"variables"},
     {name:"functions"},
     {name:"elements"},
+    {name:"style"},
   ]

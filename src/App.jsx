@@ -50,6 +50,12 @@ import GetValue from "./nodes/control/GetValue.jsx";
 import Text from "./nodes/Elements/Text.jsx";
 import CreateFun from "./nodes/functions/CreateFun.jsx";
 import FireFun from "./nodes/functions/FireFun.jsx";
+import Style from "./nodes/Style/Style.jsx";
+import GetStyle from "./nodes/Style/GetStyle.jsx";
+import BackgroundC from "./nodes/Style/Background.jsx"
+import Color from "./nodes/Style/Color.jsx";
+import FontSize from "./nodes/Style/Fontsize.jsx";
+import SetStyle from "./nodes/control/SetStyle.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -106,6 +112,7 @@ const nodeTypes = {
   SetText,
   SetValue,
   GetValue,
+  SetStyle,
 
   Add: AddNode,
   Sub: SubNode,
@@ -126,6 +133,12 @@ const nodeTypes = {
 
   CreateFun,
   FireFun,
+
+  Style,
+  GetStyle,
+  Background:BackgroundC,
+  Color,
+  FontSize,
 };
 
 let id = Math.random();
@@ -168,6 +181,7 @@ function Flow() {
     { node: <LoopNode list={true} />, type: "Loop" ,cat:"control"},
     { node: <SetText list={true} />, type: "SetText" ,cat:"control"},
     { node: <SetValue list={true} />, type: "SetValue" ,cat:"control"},
+    { node: <SetStyle list={true} />, type: "SetStyle" ,cat:"control"},
     { node: <GetValue list={true} />, type: "GetValue" ,cat:"control"},
 
     { node: <TextNode list={true} />, type: "text",cat:"input" },
@@ -205,6 +219,13 @@ function Flow() {
     { node: <DivElm list={true} />, type: "DivElm",cat:"elements" },
     { node: <Input list={true} />, type: "Input",cat:"elements" },
     { node: <Text list={true} />, type: "Text",cat:"elements" },
+
+
+    { node: <Style list={true} />, type: "Style",cat:"style" },
+    { node: <GetStyle list={true} />, type: "GetStyle",cat:"style" },
+    { node: <BackgroundC list={true} />, type: "Background",cat:"style" },
+    { node: <Color list={true} />, type: "Color",cat:"style" },
+    { node: <FontSize list={true} />, type: "FontSize",cat:"style" },
   ]);
 
   
@@ -290,7 +311,7 @@ function Flow() {
         data: { onChange: onChange , text: "" ,id:newNode.id},
       }
 
-      setNodes((nds) => nds.concat(type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"||type=="SetText"||type=="SetValue"||type=="GetValue" ||type=="CreateFun"||type=="FireFun" ?newTextNode:newNode));
+      setNodes((nds) => nds.concat(type=="SetStyle"||type=="GetStyle"||type=="Style"|| type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"||type=="SetText"||type=="SetValue"||type=="GetValue" ||type=="CreateFun"||type=="FireFun" ?newTextNode:newNode));
     },
     [reactFlowInstance]
   );
@@ -355,7 +376,6 @@ function Flow() {
               connectionLineStyle={connectionLineStyle}
               defaultEdgeOptions={edgeOptions}
               style={rfStyle}
-              snapToGrid
             >
               <Controls className="bg-white" />
               <MiniMap zoomable pannable className="bg-gray-400" />

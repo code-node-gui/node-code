@@ -1,11 +1,16 @@
-
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
+const handleStyle = { top: 10 };
+import StyleIcon from '@mui/icons-material/Style';
 import { NodesContext } from '../../context/NodesContext';
-import CodeIcon from '@mui/icons-material/Code';
-function FireFun({ data , isConnectable ,list}) {
+
+function GetStyle({ data, isConnectable , list}) {
+
+
+
     const [text, setText ]=useState('')
     const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
+
 
     useEffect(()=>{
       setText(data?.value)
@@ -37,19 +42,21 @@ function FireFun({ data , isConnectable ,list}) {
     }, [text])
     
 
+
+
   return (
-    <div className="  hover:scale-[1.025] duration-150  p-2 shadow-lg rounded-md flex bg-[#fffe] backdrop-blur-sm border ">
+    <div className=" flex-row hover:scale-[1.025] duration-150 flex p-2 shadow-lg rounded-md bg-[#fffe] backdrop-blur-sm border ">
+        <label htmlFor="condition" className='text-sm text-[#333] flex items-center gap-1'>get style </label>
         {
             !list&&
             <>
-        <Handle className='  rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
-        <Handle className='  rounded-lg ' type="source" id="next" position={Position.Bottom} isConnectable={isConnectable} />
+        <Handle className='w-4 rounded-full' type="target" position={Position.Top} id="target" isConnectable={isConnectable} />
+        <Handle className=' rounded-full' type="source" position={Position.Bottom} id="next" isConnectable={isConnectable} />
+        <input style={{width:2+text?.length+"ch"}} value={text} onChange={(e)=>setText(e.target.value)} className=' ml-2 min-w-[30px] rounded-sm bg-[#eee] px-2 outline-none   text-[#333] '/>
             </>
         }
-        <label className='text-[#333] pr-2'>fire <CodeIcon/></label>
-        <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
     </div>
   );
 }
 
-export default FireFun;
+export default GetStyle;
