@@ -63,6 +63,8 @@ import ChangeVarBy from "./nodes/variables/ChangeVarBy.jsx";
 import LoopIndex from "./nodes/control/LoopIndex.jsx";
 import SetParam from "./nodes/functions/SetParam.jsx";
 import GetParam from "./nodes/functions/GetParam.jsx";
+import RandomNum from "./nodes/math/RandomNum.jsx";
+import Return from "./nodes/functions/Return.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -141,6 +143,7 @@ const nodeTypes = {
   Sub: SubNode,
   Mul: MulNode,
   Div: DivNode,
+  RandomNum,
 
   CreateVar,
   GetVar,
@@ -162,6 +165,7 @@ const nodeTypes = {
   FireFun,
   SetParam,
   GetParam,
+  Return,
 
   Style,
   GetStyle,
@@ -243,6 +247,7 @@ function Flow() {
     { node: <SubNode list={true} />, type: "Sub", cat:"math" },
     { node: <MulNode list={true} />, type: "Mul", cat:"math" },
     { node: <DivNode list={true} />, type: "Div", cat:"math" },
+    { node: <RandomNum list={true} />, type: "RandomNum", cat:"math" },
 
 
     { node: <CreateVar list={true} />, type: "CreateVar",cat:"variables" },
@@ -257,6 +262,7 @@ function Flow() {
     { node: <FireFun list={true} />, type: "FireFun",cat:"functions" },
     { node: <SetParam list={true} />, type: "SetParam",cat:"functions" },
     { node: <GetParam list={true} />, type: "GetParam",cat:"functions" },
+    { node: <Return list={true} />, type: "Return",cat:"functions" },
 
 
     { node: <Button list={true} />, type: "Button",cat:"elements" },
