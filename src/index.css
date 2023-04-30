@@ -65,3 +65,11 @@ input[type=number] {
   margin:1px;
   flex: 1;
 }
+#displayRoot input{
+  background-color: #fff;
+  border: 1px solid #aaa;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin:2px;
+  flex: 1;
+}

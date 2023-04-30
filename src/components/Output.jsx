@@ -1,8 +1,10 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import { NodesContext } from "../context/NodesContext";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import { backdropClasses } from "@mui/material";
 
 var Console = [];
+var Display = [];
 function Output() {
   const { nodes, setNodes, edges, onNodesChange, display, setDisplay } =
     useContext(NodesContext);
@@ -38,6 +40,11 @@ function Output() {
       setResult([]);
     }
   }, [resultUp, start]);
+
+  useEffect(() => {
+    setStart(false)
+  }, [ nodes]);
+  
 
   const getNode = (node, sourceHandle) => {
     let a = edges.filter(
@@ -81,7 +88,7 @@ function Output() {
   //   };
 
   var variables = [];
-  const compiling = (node) => {
+  const compiling = (node,loopVar) => {
     if (nodes[node]?.type == "Start") {
       setResult([]);
       variables = [];
@@ -102,11 +109,11 @@ function Output() {
         compiling(getNode(node, "start"));
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "Output") {
-        Console.push(compiling(getNode(node, "value")));
+        Console.push(compiling(getNode(node, "value"),loopVar));
         setResultUp((p) => p + 1);
-        compiling(getNode(node, "next"));
+        compiling(getNode(node, "next"),loopVar);
       } else if (nodes[node]?.type == "Display") {
-        setResultDisplay((p) => [...p, compiling(getNode(node, "value"))]);
+        setResultDisplay((p) => [...p, compiling(getNode(node, "value"),loopVar)]);
         setResultUp((p) => p + 1);
         compiling(getNode(node, "next"));
       } else if (nodes[node]?.type == "text") {
@@ -119,7 +126,7 @@ function Output() {
           index < compiling(getNode(node, "times"));
           index++
         ) {
-          compiling(getNode(node, "do"));
+          compiling(getNode(node, "do"),index);
         }
       } else if (nodes[node]?.type == "Equal") {
         return (
@@ -192,15 +199,16 @@ function Output() {
       } else if (nodes[node]?.type == "Ask") {
         return prompt(nodes[node].data.value);
       } else if (nodes[node]?.type == "Button") {
+        let a = String(compiling(getNode(node, "value"),loopVar))
         return (
           <Fragment key={Math.random()}>
             <button
               id={compiling(getNode(node, "name"))}
               style={{...compiling(getNode(node, "style"))}}
               key={Math.random()}
-              onClick={() => compiling(getNode(node, "click"))}
+              onClick={() => compiling(getNode(node, "click"),loopVar)}
             >
-              {String(compiling(getNode(node, "value")))}
+              {a}
             </button>{" "}
             {compiling(getNode(node, "next"))}
           </Fragment>
@@ -264,6 +272,7 @@ function Output() {
           compiling(getNode(node, "value"))
       } else if (nodes[node]?.type == "FireFun") {
           fireFunction(nodes[node]?.data?.value)
+          compiling(getNode(node, "next"))
       } else if (nodes[node]?.type == "Style") {
           compiling(getNode(node, "value"))
       } else if (nodes[node]?.type == "GetStyle") {
@@ -274,6 +283,25 @@ function Output() {
           return { color:compiling(getNode(node, "value")) , ...compiling(getNode(node,"next"))}
       } else if (nodes[node]?.type == "FontSize") {
           return { fontSize:compiling(getNode(node, "value")) , ...compiling(getNode(node,"next"))}
+      } else if (nodes[node]?.type == "CreateArray") {
+          let a = [...compiling(getNode(node, "value"))].flat(Infinity)
+          return a
+      } else if (nodes[node]?.type == "ArrayItem") {
+          let a =  [nodes[node]?.data?.value] 
+          let b = compiling(getNode(node, "next"))
+          if(b){
+            return [a,b]
+          }else{
+            return a
+          }
+          
+      } else if (nodes[node]?.type == "GetItem") {
+          return window[[nodes[node]?.data?.value]][compiling(getNode(node, "index"),loopVar)]
+      } else if (nodes[node]?.type == "ChangeVarBy") {
+          window[[nodes[node]?.data?.value]]+=Number(compiling(getNode(node, "value")))
+          compiling(getNode(node, "next"))
+      } else if (nodes[node]?.type == "LoopIndex") {
+        return loopVar;
       } else {
         compiling(null);
       }
@@ -295,7 +323,10 @@ function Output() {
       </h1>
       <div className="py-2 flex-1  overflow-auto w-full">
         <div className="text-gray-600 px-3 break-all" id="displayRoot">
-          {resultDisplay.length > 0 && resultDisplay}
+          {
+            resultDisplay &&
+            resultDisplay
+          }
         </div>
       </div>
       <h1 className="mt-8   text-[#333]  text-xl px-3">Console</h1>

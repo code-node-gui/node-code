@@ -56,6 +56,11 @@ import BackgroundC from "./nodes/Style/Background.jsx"
 import Color from "./nodes/Style/Color.jsx";
 import FontSize from "./nodes/Style/Fontsize.jsx";
 import SetStyle from "./nodes/control/SetStyle.jsx";
+import CreateArray from "./nodes/variables/CreateArray.jsx";
+import ArrayItem from "./nodes/variables/ArrayItem.jsx";
+import GetItem from "./nodes/variables/GetItem.jsx";
+import ChangeVarBy from "./nodes/variables/ChangeVarBy.jsx";
+import LoopIndex from "./nodes/control/LoopIndex.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -92,11 +97,27 @@ const initialNodes = [
 
 // we define the nodeTypes outside of the component to prevent re-renderings
 // you could also use useMemo inside the component
+
+let id = Math.random();
+const getId = () => `node_${id++}`;
+
+
+
+
+
+
+
+
+
+
+
+
 const nodeTypes = {
   Output: OutputNode,
   Display,
 
   If: IfNode,
+  LoopIndex,
 
   text: TextNode,
   number: NumberNode,
@@ -122,6 +143,10 @@ const nodeTypes = {
   CreateVar,
   GetVar,
   SetVar,
+  CreateArray,
+  ArrayItem,
+  GetItem,
+  ChangeVarBy,
 
   And,Or,Not,
 
@@ -141,8 +166,17 @@ const nodeTypes = {
   FontSize,
 };
 
-let id = Math.random();
-const getId = () => `node_${id++}`;
+
+
+
+
+
+
+
+
+
+
+
 
 function Flow() {
   const edgeUpdateSuccessful = useRef(true);
@@ -174,11 +208,11 @@ function Flow() {
 
 
 
-
   const [nodesArray, setNodeArray] = useState([
     { node: <StartNode list={true} />, type: "Start",cat:"control" },
     { node: <IfNode list={true} />, type: "If",cat:"control" },
     { node: <LoopNode list={true} />, type: "Loop" ,cat:"control"},
+    { node: <LoopIndex list={true} />, type: "LoopIndex" ,cat:"control"},
     { node: <SetText list={true} />, type: "SetText" ,cat:"control"},
     { node: <SetValue list={true} />, type: "SetValue" ,cat:"control"},
     { node: <SetStyle list={true} />, type: "SetStyle" ,cat:"control"},
@@ -210,6 +244,10 @@ function Flow() {
     { node: <CreateVar list={true} />, type: "CreateVar",cat:"variables" },
     { node: <SetVar list={true} />, type: "SetVar",cat:"variables" },
     { node: <GetVar list={true} />, type: "GetVar",cat:"variables" },
+    { node: <CreateArray list={true} />, type: "CreateArray",cat:"variables" },
+    { node: <ArrayItem list={true} />, type: "ArrayItem",cat:"variables" },
+    { node: <GetItem list={true} />, type: "GetItem",cat:"variables" },
+    { node: <ChangeVarBy list={true} />, type: "ChangeVarBy",cat:"variables" },
 
     { node: <CreateFun list={true} />, type: "CreateFun",cat:"functions" },
     { node: <FireFun list={true} />, type: "FireFun",cat:"functions" },
@@ -311,7 +349,7 @@ function Flow() {
         data: { onChange: onChange , text: "" ,id:newNode.id},
       }
 
-      setNodes((nds) => nds.concat(type=="SetStyle"||type=="GetStyle"||type=="Style"|| type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"||type=="SetText"||type=="SetValue"||type=="GetValue" ||type=="CreateFun"||type=="FireFun" ?newTextNode:newNode));
+      setNodes((nds) => nds.concat(type=="ChangeVarBy"||type=="GetItem"||type=="ArrayItem"||type=="SetStyle"||type=="GetStyle"||type=="Style"|| type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"||type=="SetText"||type=="SetValue"||type=="GetValue" ||type=="CreateFun"||type=="FireFun" ?newTextNode:newNode));
     },
     [reactFlowInstance]
   );
