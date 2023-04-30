@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 import { NodesContext } from '../../context/NodesContext';
 import CodeIcon from '@mui/icons-material/Code';
-function FireFun({ data , isConnectable ,list}) {
+function SetParam({ data , isConnectable ,list}) {
     const [text, setText ]=useState('')
     const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
 
@@ -44,13 +44,13 @@ function FireFun({ data , isConnectable ,list}) {
             <>
         <Handle className='  rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
         <Handle className='  rounded-lg ' type="source" id="next" position={Position.Bottom} isConnectable={isConnectable} />
-        <Handle className='  rounded-lg ' type="source" id="params" position={Position.Right} isConnectable={isConnectable} />
+        <Handle className='  rounded-lg ' type="source" id="value" position={Position.Right} isConnectable={isConnectable} />
             </>
         }
-        <label className='text-[#333] pr-2'>fire <CodeIcon/></label>
+        <label className='text-[#333] pr-2'>set param </label>
         <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
     </div>
   );
 }
 
-export default FireFun;
+export default SetParam;
