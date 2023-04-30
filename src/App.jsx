@@ -61,6 +61,8 @@ import ArrayItem from "./nodes/variables/ArrayItem.jsx";
 import GetItem from "./nodes/variables/GetItem.jsx";
 import ChangeVarBy from "./nodes/variables/ChangeVarBy.jsx";
 import LoopIndex from "./nodes/control/LoopIndex.jsx";
+import SetParam from "./nodes/functions/SetParam.jsx";
+import GetParam from "./nodes/functions/GetParam.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -158,6 +160,8 @@ const nodeTypes = {
 
   CreateFun,
   FireFun,
+  SetParam,
+  GetParam,
 
   Style,
   GetStyle,
@@ -251,6 +255,8 @@ function Flow() {
 
     { node: <CreateFun list={true} />, type: "CreateFun",cat:"functions" },
     { node: <FireFun list={true} />, type: "FireFun",cat:"functions" },
+    { node: <SetParam list={true} />, type: "SetParam",cat:"functions" },
+    { node: <GetParam list={true} />, type: "GetParam",cat:"functions" },
 
 
     { node: <Button list={true} />, type: "Button",cat:"elements" },
@@ -349,7 +355,7 @@ function Flow() {
         data: { onChange: onChange , text: "" ,id:newNode.id},
       }
 
-      setNodes((nds) => nds.concat(type=="ChangeVarBy"||type=="GetItem"||type=="ArrayItem"||type=="SetStyle"||type=="GetStyle"||type=="Style"|| type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"||type=="SetText"||type=="SetValue"||type=="GetValue" ||type=="CreateFun"||type=="FireFun" ?newTextNode:newNode));
+      setNodes((nds) => nds.concat(type=="GetParam"||type=="SetParam"||type=="ChangeVarBy"||type=="GetItem"||type=="ArrayItem"||type=="SetStyle"||type=="GetStyle"||type=="Style"|| type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"||type=="SetText"||type=="SetValue"||type=="GetValue" ||type=="CreateFun"||type=="FireFun" ?newTextNode:newNode));
     },
     [reactFlowInstance]
   );

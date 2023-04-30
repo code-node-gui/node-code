@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 import { NodesContext } from '../../context/NodesContext';
 import CodeIcon from '@mui/icons-material/Code';
-function FireFun({ data , isConnectable ,list}) {
+function GetParam({ data , isConnectable ,list}) {
     const [text, setText ]=useState('')
     const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
 
@@ -37,20 +37,18 @@ function FireFun({ data , isConnectable ,list}) {
     }, [text])
     
 
-  return (
+    return (
     <div className="  hover:scale-[1.025] duration-150  p-2 shadow-lg rounded-md flex bg-[#fffe] backdrop-blur-sm border ">
         {
             !list&&
             <>
-        <Handle className='  rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
-        <Handle className='  rounded-lg ' type="source" id="next" position={Position.Bottom} isConnectable={isConnectable} />
-        <Handle className='  rounded-lg ' type="source" id="params" position={Position.Right} isConnectable={isConnectable} />
+            <Handle className='  rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
             </>
         }
-        <label className='text-[#333] pr-2'>fire <CodeIcon/></label>
+        <label className='text-[#333] pr-2'>get param </label>
         <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
     </div>
   );
 }
 
-export default FireFun;
+export default GetParam;
