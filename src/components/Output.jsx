@@ -52,11 +52,9 @@ function Output() {
     return nodes.findIndex((n) => n.id == a);
   };
 
-  const fireFunction = (name, id) => {
-    let a = nodes.findIndex(
-      (node) => node?.data?.value == name && node.type == "CreateFun"
-    );
-    return compiling(getNode(a, "value"), null, { fnName: name, id });
+  const fireFunction = (name) => {
+    let a = nodes.findIndex(node=>node?.data?.value==name&&node.type=="CreateFun")
+    compiling(getNode(a,"value"))
   };
 
   const getStyle = (name, loopVar, fun) => {
@@ -267,11 +265,8 @@ function Output() {
       } else if (nodes[node]?.type == "CreateFun") {
         compiling(getNode(node, "value"), loopVar, fun);
       } else if (nodes[node]?.type == "FireFun") {
-        try{ 
-          return fireFunction(nodes[node]?.data?.value, nodes[node]?.id);;
-        } finally {
-          compiling(getNode(node, "next"), loopVar, fun);
-        }
+          fireFunction(nodes[node]?.data?.value)
+          compiling(getNode(node, "next"),loopVar)
       } else if (nodes[node]?.type == "Style") {
         compiling(getNode(node, "value"), loopVar, fun);
       } else if (nodes[node]?.type == "GetStyle") {
