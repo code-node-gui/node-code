@@ -71,5 +71,10 @@ input[type=number] {
   padding: 2px 8px;
   border-radius: 6px;
   margin:2px;
+  min-width: none;
   flex: 1;
+}
+#displayRoot div{
+  display: flex;
+  flex-direction: row;
 }

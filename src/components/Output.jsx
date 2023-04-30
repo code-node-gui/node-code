@@ -95,19 +95,19 @@ function Output() {
     }
     if (node != null) {
       if (nodes[node]?.type == "If") {
-        if (compiling(getNode(node, "condition"))) {
-          compiling(getNode(node, "do"));
+        if (compiling(getNode(node, "condition"),loopVar)) {
+          compiling(getNode(node, "do"),loopVar);
         } else {
-          compiling(getNode(node, "else"));
+          compiling(getNode(node, "else"),loopVar);
         }
-        compiling(getNode(node, "next"));
+        compiling(getNode(node, "next"),loopVar);
       } else if (nodes[node]?.type == "TrueNode") {
         return true;
       } else if (nodes[node]?.type == "FalseNode") {
         return false;
       } else if (nodes[node]?.type == "Start") {
-        compiling(getNode(node, "start"));
-        compiling(getNode(node, "next"));
+        compiling(getNode(node, "start"),loopVar);
+        compiling(getNode(node, "next"),loopVar);
       } else if (nodes[node]?.type == "Output") {
         Console.push(compiling(getNode(node, "value"),loopVar));
         setResultUp((p) => p + 1);
@@ -115,77 +115,77 @@ function Output() {
       } else if (nodes[node]?.type == "Display") {
         setResultDisplay((p) => [...p, compiling(getNode(node, "value"),loopVar)]);
         setResultUp((p) => p + 1);
-        compiling(getNode(node, "next"));
+        compiling(getNode(node, "next"),loopVar);
       } else if (nodes[node]?.type == "text") {
         return nodes[node].data.value;
       } else if (nodes[node]?.type == "number") {
         return Number(nodes[node].data.value);
       } else if (nodes[node]?.type == "Loop") {
-        for (
+         for (
           let index = 0;
-          index < compiling(getNode(node, "times"));
+          index < compiling(getNode(node, "times"),loopVar);
           index++
         ) {
           compiling(getNode(node, "do"),index);
         }
       } else if (nodes[node]?.type == "Equal") {
         return (
-          compiling(getNode(node, "first")) ===
-          compiling(getNode(node, "second"))
+          compiling(getNode(node, "first"),loopVar) ===
+          compiling(getNode(node, "second"),loopVar)
         );
       } else if (nodes[node]?.type == "Bigger") {
         return (
-          compiling(getNode(node, "first")) < compiling(getNode(node, "second"))
+          compiling(getNode(node, "first"),loopVar) < compiling(getNode(node, "second"),loopVar)
         );
       } else if (nodes[node]?.type == "Smaller") {
         return (
-          compiling(getNode(node, "first")) > compiling(getNode(node, "second"))
+          compiling(getNode(node, "first"),loopVar) > compiling(getNode(node, "second"),loopVar)
         );
       } else if (nodes[node]?.type == "Add") {
         return (
-          compiling(getNode(node, "first")) + compiling(getNode(node, "second"))
+          compiling(getNode(node, "first"),loopVar) + compiling(getNode(node, "second"),loopVar)
         );
       } else if (nodes[node]?.type == "Sub") {
         return (
-          compiling(getNode(node, "first")) - compiling(getNode(node, "second"))
+          compiling(getNode(node, "first"),loopVar) - compiling(getNode(node, "second"),loopVar)
         );
       } else if (nodes[node]?.type == "Mul") {
         return (
-          compiling(getNode(node, "first")) * compiling(getNode(node, "second"))
+          compiling(getNode(node, "first"),loopVar) * compiling(getNode(node, "second"),loopVar)
         );
       } else if (nodes[node]?.type == "Div") {
         return (
-          compiling(getNode(node, "first")) / compiling(getNode(node, "second"))
+          compiling(getNode(node, "first"),loopVar) / compiling(getNode(node, "second"),loopVar)
         );
       } else if (nodes[node]?.type == "And") {
         console.log(
-          compiling(getNode(node, "first")) &&
-            compiling(getNode(node, "second"))
+          compiling(getNode(node, "first"),loopVar) &&
+            compiling(getNode(node, "second"),loopVar)
         );
         return (
-          (compiling(getNode(node, "first")) || false) &&
-          (compiling(getNode(node, "second")) || false)
+          (compiling(getNode(node, "first"),loopVar) || false) &&
+          (compiling(getNode(node, "second"),loopVar) || false)
         );
       } else if (nodes[node]?.type == "Or") {
         console.log(
-          compiling(getNode(node, "first")) ||
-            compiling(getNode(node, "second"))
+          compiling(getNode(node, "first"),loopVar) ||
+            compiling(getNode(node, "second"),loopVar)
         );
         return (
-          compiling(getNode(node, "first")) ||
+          compiling(getNode(node, "first"),loopVar) ||
           false ||
-          compiling(getNode(node, "second")) ||
+          compiling(getNode(node, "second"),loopVar) ||
           false
         );
       } else if (nodes[node]?.type == "Not") {
-        return !compiling(getNode(node, "first"));
+        return !compiling(getNode(node, "first"),loopVar);
       } else if (nodes[node]?.type == "CreateVar") {
         // variables.push({
         //   name: nodes[node].data.value,
         //   value: compiling(getNode(node, "value")),
         // });
-        window[nodes[node].data.value] = compiling(getNode(node, "value"));
-        compiling(getNode(node, "next"));
+        window[nodes[node].data.value] = compiling(getNode(node, "value"),loopVar);
+        compiling(getNode(node, "next"),loopVar);
       } else if (nodes[node]?.type == "GetVar") {
         // return variables.filter((v) => v.name == nodes[node].data.value)[0]
         //   ?.value;
@@ -194,8 +194,8 @@ function Output() {
         // variables[
         //   variables.findIndex((v) => v.name == nodes[node].data.value)
         // ].value = compiling(getNode(node, "value"));
-        window[nodes[node].data.value] = compiling(getNode(node, "value"));
-        compiling(getNode(node, "next"));
+        window[nodes[node].data.value] = compiling(getNode(node, "value"),loopVar);
+        compiling(getNode(node, "next"),loopVar);
       } else if (nodes[node]?.type == "Ask") {
         return prompt(nodes[node].data.value);
       } else if (nodes[node]?.type == "Button") {
@@ -203,92 +203,92 @@ function Output() {
         return (
           <Fragment key={Math.random()}>
             <button
-              id={compiling(getNode(node, "name"))}
-              style={{...compiling(getNode(node, "style"))}}
+              id={compiling(getNode(node, "name"),loopVar)}
+              style={{...compiling(getNode(node, "style"),loopVar)}}
               key={Math.random()}
               onClick={() => compiling(getNode(node, "click"),loopVar)}
             >
               {a}
             </button>{" "}
-            {compiling(getNode(node, "next"))}
+            {compiling(getNode(node, "next"),loopVar)}
           </Fragment>
         );
       } else if (nodes[node]?.type == "DivElm") {
-        let divType = compiling(getNode(node, "type"));
-        let divStyle = compiling(getNode(node, "style"));
+        let divType = compiling(getNode(node, "type"),loopVar);
+        let divStyle = compiling(getNode(node, "style"),loopVar);
         return (
           <Fragment key={Math.random()}>
             <div
-              style={{...compiling(getNode(node, "style"))}}
+              style={{...compiling(getNode(node, "style"),loopVar)}}
              >
-              {compiling(getNode(node, "value"))}
+              {compiling(getNode(node, "value"),loopVar)}
             </div>
-            {compiling(getNode(node, "next"))}
+            {compiling(getNode(node, "next"),loopVar)}
           </Fragment>
         );
       } else if (nodes[node]?.type == "SetText") {
         window.document.getElementById(nodes[node]?.data?.value).textContent =
-          compiling(getNode(node, "text"));
-        compiling(getNode(node, "next"));
+          compiling(getNode(node, "text"),loopVar);
+        compiling(getNode(node, "next"),loopVar);
       } else if (nodes[node]?.type == "Input") {
         return (
           <Fragment key={Math.random()}>
             <input
-              id={compiling(getNode(node, "name"))}
-              style={{...compiling(getNode(node, "style"))}}
+              id={compiling(getNode(node, "name"),loopVar)}
+              style={{...compiling(getNode(node, "style"),loopVar)}}
               key={Math.random()}
-              onChange={() => compiling(getNode(node, "change"))}
-              value={compiling(getNode(node, "value"))}
+              onChange={() => compiling(getNode(node, "change"),loopVar)}
+              value={compiling(getNode(node, "value"),loopVar)}
             />{" "}
-            {compiling(getNode(node, "next"))}
+            {compiling(getNode(node, "next"),loopVar)}
           </Fragment>
         );
       } else if (nodes[node]?.type == "SetValue") {
         window.document.getElementById(nodes[node]?.data?.value).value =
-          compiling(getNode(node, "value"));
-        compiling(getNode(node, "next"));
+          compiling(getNode(node, "value"),loopVar);
+        compiling(getNode(node, "next"),loopVar);
       } else if (nodes[node]?.type == "SetStyle") {
-        let a = compiling(getNode(node, "value"))
+        let a = compiling(getNode(node, "value"),loopVar)
         let keys = Object.keys(a);  
         keys.forEach(p=>{
           window.document.getElementById(nodes[node]?.data?.value).style[p]=a[p]
         })
-        compiling(getNode(node, "next"));
+        compiling(getNode(node, "next"),loopVar);
       } else if (nodes[node]?.type == "GetValue") {
         return window.document.getElementById(nodes[node]?.data?.value).value;
       } else if (nodes[node]?.type == "Text") {
         return (
           <Fragment key={Math.random()}>
             <p
-              id={compiling(getNode(node, "name"))}
-              style={{...compiling(getNode(node, "style"))}}
+              id={compiling(getNode(node, "name"),loopVar)}
+              style={{...compiling(getNode(node, "style"),loopVar)}}
             >
-              {String(compiling(getNode(node, "text")))}
+              {String(compiling(getNode(node, "text"),loopVar))}
             </p>{" "}
-            {compiling(getNode(node, "next"))}
+            {compiling(getNode(node, "next"),loopVar)}
           </Fragment>
         );
       } else if (nodes[node]?.type == "CreateFun") {
-          compiling(getNode(node, "value"))
+          compiling(getNode(node, "value"),loopVar)
       } else if (nodes[node]?.type == "FireFun") {
           fireFunction(nodes[node]?.data?.value)
-          compiling(getNode(node, "next"))
+          compiling(getNode(node, "next"),loopVar)
       } else if (nodes[node]?.type == "Style") {
-          compiling(getNode(node, "value"))
+          compiling(getNode(node, "value"),loopVar)
       } else if (nodes[node]?.type == "GetStyle") {
-          return {...getStyle(nodes[node]?.data?.value),...compiling(getNode(node,"next"))}
+          return {...getStyle(nodes[node]?.data?.value),...compiling(getNode(node,"next"),loopVar)}
       } else if (nodes[node]?.type == "Background") {
-          return { backgroundColor:compiling(getNode(node, "value")) , ...compiling(getNode(node,"next"))}
+          return { backgroundColor:compiling(getNode(node, "value"),loopVar) , ...compiling(getNode(node,"next"),loopVar)}
       } else if (nodes[node]?.type == "Color") {
-          return { color:compiling(getNode(node, "value")) , ...compiling(getNode(node,"next"))}
+          return { color:compiling(getNode(node, "value"),loopVar) , ...compiling(getNode(node,"next"),loopVar)}
       } else if (nodes[node]?.type == "FontSize") {
-          return { fontSize:compiling(getNode(node, "value")) , ...compiling(getNode(node,"next"))}
+          return { fontSize:compiling(getNode(node, "value"),loopVar) , ...compiling(getNode(node,"next"),loopVar)}
       } else if (nodes[node]?.type == "CreateArray") {
-          let a = [...compiling(getNode(node, "value"))].flat(Infinity)
+          let a = [...compiling(getNode(node, "value"),loopVar)].flat(Infinity)
           return a
       } else if (nodes[node]?.type == "ArrayItem") {
           let a =  [nodes[node]?.data?.value] 
-          let b = compiling(getNode(node, "next"))
+          let b = compiling(getNode(node, "next",loopVar))
           if(b){
             return [a,b]
           }else{
@@ -298,8 +298,8 @@ function Output() {
       } else if (nodes[node]?.type == "GetItem") {
           return window[[nodes[node]?.data?.value]][compiling(getNode(node, "index"),loopVar)]
       } else if (nodes[node]?.type == "ChangeVarBy") {
-          window[[nodes[node]?.data?.value]]+=Number(compiling(getNode(node, "value")))
-          compiling(getNode(node, "next"))
+          window[[nodes[node]?.data?.value]]+=Number(compiling(getNode(node, "value"),loopVar))
+          compiling(getNode(node, "next"),loopVar)
       } else if (nodes[node]?.type == "LoopIndex") {
         return loopVar;
       } else {
