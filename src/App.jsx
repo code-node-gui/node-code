@@ -323,7 +323,7 @@ function Flow() {
 
   return (
     <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange,display,setDisplay }}>
-      <div className="flex flex-col w-screen h-screen">
+      <div className="flex flex-col w-screen h-screen ">
         <ReactFlowProvider >
           <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
 
