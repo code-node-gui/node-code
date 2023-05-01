@@ -44,6 +44,7 @@ function ArrayItem({ data , isConnectable ,list}) {
             <>
         <Handle className=' rounded-lg w-4' type="target" id="source" position={Position.Top} isConnectable={isConnectable} />
         <Handle className=' rounded-lg w-4' type="source" id="next" position={Position.Bottom} isConnectable={isConnectable} />
+        <Handle className=' rounded-lg ' type="source" id="value" position={Position.Right} isConnectable={isConnectable} />
             </>
         }
         <label className='text-[#333] pr-2'>item</label>

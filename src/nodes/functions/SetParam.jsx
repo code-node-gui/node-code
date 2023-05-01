@@ -4,27 +4,27 @@ import { Handle, Position } from 'reactflow';
 import { NodesContext } from '../../context/NodesContext';
 import CodeIcon from '@mui/icons-material/Code';
 function SetParam({ data , isConnectable ,list}) {
-    const [text, setText ]=useState('')
+    const [value, setValue ]=useState('')
+    const [value2, setValue2 ]=useState('')
     const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
 
     useEffect(()=>{
-      setText(data?.value)
+      setValue(data?.value)
+      setValue2(data?.value2)
     },[])
 
-    const run = (v,id)=> setNodes((nds) =>
+    const run = (id)=> setNodes((nds) =>
         nds.map((node) => {
           if (node.id !== id) {
             return node;
           }
-
-          const value = v;
-
-
           return {
             ...node,
             data: {
               ...node.data,
-              value,
+              value, 
+              value2, 
+
             },
           };
         })
@@ -33,8 +33,12 @@ function SetParam({ data , isConnectable ,list}) {
 
 
     useEffect(() => {
-      run(text,data?.id)
-    }, [text])
+      run(data?.id)
+    }, [value])
+    
+    useEffect(() => {
+      run(data?.id)
+    }, [value2])
     
 
   return (
@@ -47,8 +51,10 @@ function SetParam({ data , isConnectable ,list}) {
         <Handle className='  rounded-lg ' type="source" id="value" position={Position.Right} isConnectable={isConnectable} />
             </>
         }
-        <label className='text-[#333] pr-2'>set param </label>
-        <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
+        <label className='text-[#333] pr-2'>param </label>
+        <input style={{width:2+value?.length+"ch",background:value?.includes(" ")?"#fdd":"#eee"}} value={value} onChange={(e)=>setValue(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
+        <label className='text-[#333] px-2'>= </label>
+        <input style={{width:2+value2?.length+"ch",background:value2?.includes(" ")?"#fdd":"#eee"}} value={value2} onChange={(e)=>setValue2(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
     </div>
   );
 }

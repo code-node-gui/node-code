@@ -3,15 +3,14 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
 import { NodesContext } from '../../context/NodesContext';
-const handleStyle = { top: 10 };
 
-function CreateVar({ data , isConnectable ,list}) {
-    const [text, setText ]=useState('')
+function AddToArray({ data , isConnectable ,list}) {
+    const [array, setArray ]=useState('')
     const [value, setValue ]=useState('')
     const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
 
     useEffect(()=>{
-      setText(data?.text)
+      setArray(data?.array)
       setValue(data?.value)
     },[])
 
@@ -21,12 +20,11 @@ function CreateVar({ data , isConnectable ,list}) {
             return node;
           }
 
-
           return {
             ...node,
             data: {
               ...node.data,
-              text,
+              array,
               value,
             },
           };
@@ -37,7 +35,8 @@ function CreateVar({ data , isConnectable ,list}) {
 
     useEffect(() => {
       run(data?.id)
-    }, [value,text])
+    }, [value,array])
+    
     
 
   return (
@@ -45,17 +44,17 @@ function CreateVar({ data , isConnectable ,list}) {
         {
             !list&&
             <>
-        <Handle className='  rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
-        <Handle className='  rounded-lg ' type="source" id="value" position={Position.Right} isConnectable={isConnectable} />
-        <Handle className='  rounded-lg ' type="source" id="next" position={Position.Bottom} isConnectable={isConnectable} />
+        <Handle className=' rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
+        <Handle className=' rounded-lg h-4' type="source" id="value" position={Position.Right} isConnectable={isConnectable} />
+        <Handle className=' rounded-lg ' type="source" id="next" position={Position.Bottom} isConnectable={isConnectable} />
             </>
         }
-        <label className='text-[#333] pr-2'>create</label>
-        <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
-        <label className='text-[#333] px-2'>=</label>
+        <p className='text-[#333] px-2'>add to</p>
+        <input style={{width:2+array?.length+"ch"}} value={array} onChange={(e)=>setArray(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
+        <p className='text-[#333] px-2'>=</p>
         <input style={{width:2+value?.length+"ch"}} value={value} onChange={(e)=>setValue(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
     </div>
   );
 }
 
-export default CreateVar;
+export default AddToArray;

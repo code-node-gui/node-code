@@ -1,22 +1,54 @@
+
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
-const handleStyle = { top: 10 };
 import { NodesContext } from '../../context/NodesContext';
+import CodeIcon from '@mui/icons-material/Code';
+function WidthVal({ data , isConnectable ,list}) {
+    const [text, setText ]=useState('')
+    const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
 
-function WidthVal({ data, isConnectable , list}) {
+    useEffect(()=>{
+      setText(data?.value)
+    },[])
+
+    const run = (v,id)=> setNodes((nds) =>
+        nds.map((node) => {
+          if (node.id !== id) {
+            return node;
+          }
+
+          const value = v;
 
 
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              value,
+            },
+          };
+        })
+      );
+
+
+
+    useEffect(() => {
+      run(text,data?.id)
+    }, [text])
+    
 
   return (
-    <div className=" flex-row hover:scale-[1.025] duration-150 flex p-2 shadow-lg rounded-md bg-[#fffe] backdrop-blur-sm border ">
-        <label htmlFor="condition" className='text-sm text-[#333] flex items-center gap-1'>width</label>
+    <div className="  hover:scale-[1.025] duration-150  p-2 shadow-lg rounded-md flex bg-[#fffe] backdrop-blur-sm border ">
         {
             !list&&
             <>
-        <Handle className='rounded-full w-4' type="target" position={Position.Top} id="target" isConnectable={isConnectable} />
-        <Handle className='rounded-full' type="source" position={Position.Right} id="value" isConnectable={isConnectable} />
-        <Handle className='rounded-full' type="source" position={Position.Bottom} id="next" isConnectable={isConnectable} />
+        <Handle className='  rounded-lg w-4' type="target" id="target" position={Position.Top} isConnectable={isConnectable} />
+        <Handle className='  rounded-lg ' type="source" id="value" position={Position.Right} isConnectable={isConnectable} />
+        <Handle className='  rounded-lg ' type="source" id="next" position={Position.Bottom} isConnectable={isConnectable} />
             </>
         }
+        <label className='text-[#333] pr-2'>height </label>
+        <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
     </div>
   );
 }
