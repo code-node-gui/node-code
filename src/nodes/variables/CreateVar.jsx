@@ -7,25 +7,26 @@ const handleStyle = { top: 10 };
 
 function CreateVar({ data , isConnectable ,list}) {
     const [text, setText ]=useState('')
+    const [value, setValue ]=useState('')
     const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
 
     useEffect(()=>{
-      setText(data?.value)
+      setText(data?.text)
+      setValue(data?.value)
     },[])
 
-    const run = (v,id)=> setNodes((nds) =>
+    const run = (id)=> setNodes((nds) =>
         nds.map((node) => {
           if (node.id !== id) {
             return node;
           }
-
-          const value = v;
 
 
           return {
             ...node,
             data: {
               ...node.data,
+              text,
               value,
             },
           };
@@ -35,8 +36,8 @@ function CreateVar({ data , isConnectable ,list}) {
 
 
     useEffect(() => {
-      run(text,data?.id)
-    }, [text])
+      run(data?.id)
+    }, [value,text])
     
 
   return (
@@ -51,7 +52,8 @@ function CreateVar({ data , isConnectable ,list}) {
         }
         <label className='text-[#333] pr-2'>create</label>
         <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
-        <label className='text-[#333] pl-2'>=</label>
+        <label className='text-[#333] px-2'>=</label>
+        <input style={{width:2+value?.length+"ch"}} value={value} onChange={(e)=>setValue(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
     </div>
   );
 }

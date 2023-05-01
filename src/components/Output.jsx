@@ -178,20 +178,20 @@ function Output() {
       } else if (nodes[node]?.type == "Not") {
         return !compiling(getNode(node, "first"), loopVar, fun);
       } else if (nodes[node]?.type == "CreateVar") {
-        window[nodes[node].data.value] = compiling(
+        window[nodes[node]?.data?.text] = (compiling(
           getNode(node, "value"),
           loopVar,
           fun
-        );
+        )|| nodes[node]?.data?.value);
         compiling(getNode(node, "next"), loopVar, fun);
       } else if (nodes[node]?.type == "GetVar") {
         return window[nodes[node]?.data?.selected];
       } else if (nodes[node]?.type == "SetVar") {
-        window[nodes[node].data.value] = compiling(
+        window[nodes[node].data.selected] = compiling(
           getNode(node, "value"),
           loopVar,
           fun
-        );
+        )||nodes[node].data?.value;
         compiling(getNode(node, "next"), loopVar, fun);
       } else if (nodes[node]?.type == "Ask") {
         return prompt(nodes[node].data.value);
