@@ -196,11 +196,11 @@ function Output() {
       } else if (nodes[node]?.type == "Ask") {
         return prompt(nodes[node].data.value);
       } else if (nodes[node]?.type == "Button") {
-        let a = String(compiling(getNode(node, "value"), loopVar, fun));
+        let a = compiling(getNode(node, "value"), loopVar, fun)||nodes[node].data?.text;
         return (
           <Fragment key={Math.random()}>
             <button
-              id={compiling(getNode(node, "name"), loopVar, fun)}
+              id={compiling(getNode(node, "name"), loopVar, fun)||nodes[node].data?.name}
               style={{ ...compiling(getNode(node, "style"), loopVar, fun) }}
               key={Math.random()}
               onClick={() => compiling(getNode(node, "click"), loopVar, fun)}
@@ -259,7 +259,7 @@ function Output() {
               id={compiling(getNode(node, "name"), loopVar, fun)}
               style={{ ...compiling(getNode(node, "style"), loopVar, fun) }}
             >
-              {String(compiling(getNode(node, "text"), loopVar, fun))}
+              {compiling(getNode(node, "text"), loopVar, fun)}
             </p>{" "}
             {compiling(getNode(node, "next"), loopVar, fun)}
           </Fragment>

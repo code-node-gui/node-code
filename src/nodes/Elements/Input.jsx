@@ -15,7 +15,7 @@ function Input({ data, isConnectable,list }) {
         <label htmlFor="text" className={`text-end text-sm   text-[#333]  `}>change</label>
         <label htmlFor="text" className={`text-end text-sm   text-[#333]   `}>style</label>
         <label htmlFor="text" className={`text-end text-sm   text-[#333]   `}>name</label>
-        <Handle  className='top-[40px] rounded-full h-3' type="source" position={Position.Right} id="value" isConnectable={isConnectable} />
+        <Handle  className='top-[40px] rounded-full ' type="source" position={Position.Right} id="value" isConnectable={isConnectable} />
         <Handle className='top-[75px]' type="source" position={Position.Right} id="change" isConnectable={isConnectable} />
         <Handle className='top-[95px]' type="source" position={Position.Right} id="style" isConnectable={isConnectable} />
         <Handle className='top-[115px]' type="source" position={Position.Right} id="name" isConnectable={isConnectable} />
