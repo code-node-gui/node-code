@@ -69,6 +69,8 @@ import WidthVal from "./nodes/Style/WidthVal.jsx";
 import HightVal from "./nodes/Style/HightVal.jsx";
 import DisplayCss from "./nodes/Style/display.jsx";
 import FlexDir from "./nodes/Style/FlexDir.jsx";
+import Flex from "./nodes/Style/Flex.jsx";
+import AddToArray from "./nodes/variables/AddToArray.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -156,6 +158,7 @@ const nodeTypes = {
   ArrayItem,
   GetItem,
   ChangeVarBy,
+  AddToArray,
 
   And,Or,Not,
 
@@ -180,6 +183,7 @@ const nodeTypes = {
   HightVal,
   DisplayCss,
   FlexDir,
+  Flex,
 };
 
 
@@ -265,6 +269,7 @@ function Flow() {
     { node: <ArrayItem list={true} />, type: "ArrayItem",cat:"variables" },
     { node: <GetItem list={true} />, type: "GetItem",cat:"variables" },
     { node: <ChangeVarBy list={true} />, type: "ChangeVarBy",cat:"variables" },
+    { node: <AddToArray list={true} />, type: "AddToArray",cat:"variables" },
 
     { node: <CreateFun list={true} />, type: "CreateFun",cat:"functions" },
     { node: <FireFun list={true} />, type: "FireFun",cat:"functions" },
@@ -288,6 +293,7 @@ function Flow() {
     { node: <HightVal list={true} />, type: "HightVal",cat:"style" },
     { node: <DisplayCss list={true} />, type: "DisplayCss",cat:"style" },
     { node: <FlexDir list={true} />, type: "FlexDir",cat:"style" },
+    { node: <Flex list={true} />, type: "Flex",cat:"style" },
   ]);
 
   

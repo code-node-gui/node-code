@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 import { NodesContext } from '../../context/NodesContext';
 import CodeIcon from '@mui/icons-material/Code';
-function WidthVal({ data , isConnectable ,list}) {
+function Flex({ data , isConnectable ,list}) {
     const [text, setText ]=useState('')
     const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
 
@@ -47,10 +47,10 @@ function WidthVal({ data , isConnectable ,list}) {
         <Handle className='  rounded-lg ' type="source" id="next" position={Position.Bottom} isConnectable={isConnectable} />
             </>
         }
-        <label className='text-[#333] pr-2'>height </label>
+        <label className='text-[#333] pr-2'>flex </label>
         <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
     </div>
   );
 }
 
-export default WidthVal;
+export default Flex;

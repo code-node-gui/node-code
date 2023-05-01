@@ -27,7 +27,7 @@ function Output() {
       setResultDisplay("");
       compiling(getStart());
     }
-  }, [nodes, start]);
+  }, [nodes,edges, start]);
 
   useEffect(() => {
     if (start) {
@@ -52,9 +52,9 @@ function Output() {
     return nodes.findIndex((n) => n.id == a);
   };
 
-  const fireFunction = (name) => {
+  const fireFunction = (name,fireId) => {
     let a = nodes.findIndex(node=>node?.data?.value==name&&node.type=="CreateFun")
-    compiling(getNode(a,"value"))
+    return compiling(getNode(a,"value"),null,{fnName:name,id:nodes[a]?.id,fireId})
   };
 
   const getStyle = (name, loopVar, fun) => {
@@ -67,11 +67,13 @@ function Output() {
   const getParamValue = (value, fun) => {
     let a = nodes.findIndex(
       (node) =>
-        node?.data?.value == fun?.fnName &&
-        node.type == "FireFun" &&
-        node.id == fun.id
+        node?.data?.value == fun?.fnName 
+        &&
+        node.type == "FireFun" 
+        &&
+        node.id == fun.fireId
     );
-    return compiling(getNode(a, "params"), null, fun)[value];
+    return compiling(getNode(a, "params"), null, fun)[value]
   };
 
   var variables = [];
@@ -183,7 +185,7 @@ function Output() {
         );
         compiling(getNode(node, "next"), loopVar, fun);
       } else if (nodes[node]?.type == "GetVar") {
-        return window[nodes[node].data.value];
+        return window[nodes[node]?.data?.selected];
       } else if (nodes[node]?.type == "SetVar") {
         window[nodes[node].data.value] = compiling(
           getNode(node, "value"),
@@ -265,8 +267,11 @@ function Output() {
       } else if (nodes[node]?.type == "CreateFun") {
         compiling(getNode(node, "value"), loopVar, fun);
       } else if (nodes[node]?.type == "FireFun") {
-          fireFunction(nodes[node]?.data?.value)
-          compiling(getNode(node, "next"),loopVar)
+          try {
+            return fireFunction(nodes[node]?.data?.selected,nodes[node]?.id)
+          }finally{
+            compiling(getNode(node, "next"),loopVar)
+          }
       } else if (nodes[node]?.type == "Style") {
         compiling(getNode(node, "value"), loopVar, fun);
       } else if (nodes[node]?.type == "GetStyle") {
@@ -276,27 +281,27 @@ function Output() {
         };
       } else if (nodes[node]?.type == "Background") {
         return {
-          backgroundColor: compiling(getNode(node, "value"), loopVar, fun),
+          backgroundColor: compiling(getNode(node, "value") , loopVar, fun) || nodes[node]?.data.value,
           ...compiling(getNode(node, "next"), loopVar, fun),
         };
       } else if (nodes[node]?.type == "Color") {
         return {
-          color: compiling(getNode(node, "value"), loopVar, fun),
+          color: compiling(getNode(node, "value") , loopVar, fun) || nodes[node]?.data.value,
           ...compiling(getNode(node, "next"), loopVar, fun),
         };
       } else if (nodes[node]?.type == "FontSize") {
         return {
-          fontSize: compiling(getNode(node, "value"), loopVar, fun),
+          fontSize: compiling(getNode(node, "value") , loopVar, fun) || nodes[node]?.data.value,
           ...compiling(getNode(node, "next"), loopVar, fun),
         };
       } else if (nodes[node]?.type == "WidthVal") {
         return {
-          width: compiling(getNode(node, "value"), loopVar, fun),
+          width: compiling(getNode(node, "value") , loopVar, fun) || nodes[node]?.data.value,
           ...compiling(getNode(node, "next"), loopVar, fun),
         };
       } else if (nodes[node]?.type == "HightVal") {
         return {
-          height: compiling(getNode(node, "value"), loopVar, fun),
+          height: compiling(getNode(node, "value") , loopVar, fun) || nodes[node]?.data.value,
           ...compiling(getNode(node, "next"), loopVar, fun),
         };
       } else if (nodes[node]?.type == "DisplayCss") {
@@ -309,24 +314,32 @@ function Output() {
           flexDirection: compiling(getNode(node, "value") , loopVar, fun)|| nodes[node]?.data.value,
           ...compiling(getNode(node, "next"), loopVar, fun),
         };
+      } else if (nodes[node]?.type == "Flex") {
+        return {
+          flex: compiling(getNode(node, "value") , loopVar, fun) || nodes[node]?.data.value,
+          ...compiling(getNode(node, "next"), loopVar, fun),
+        };
       } else if (nodes[node]?.type == "CreateArray") {
-        let a = [...compiling(getNode(node, "value"), loopVar, fun)].flat(
+        let a = [Array.isArray(compiling(getNode(node, "value"), loopVar, fun))?[...compiling(getNode(node, "value"), loopVar, fun)]:[]].flat(
           Infinity
         );
         return a;
       } else if (nodes[node]?.type == "ArrayItem") {
-        let a = [nodes[node]?.data?.value];
+        let a = [compiling(getNode(node, "value", loopVar, fun)) ||nodes[node]?.data?.value];
         let b = compiling(getNode(node, "next", loopVar, fun));
         if (b) {
           return [a, b];
         } else {
-          return [b];
+          return [a];
         }
+      } else if (nodes[node]?.type == "AddToArray") {
+        window[nodes[node]?.data.array].push( compiling(getNode(node, "value"), loopVar, fun) || nodes[node]?.data.value)
+        compiling(getNode(node, "next"), loopVar, fun)
       } else if (nodes[node]?.type == "SetParam") {
         return {
           [nodes[node]?.data?.value]: compiling(
             getNode(node, "value", loopVar, fun)
-          ),
+          )||nodes[node]?.data?.value2,
           ...compiling(getNode(node, "next", loopVar, fun)),
         };
       } else if (nodes[node]?.type == "GetParam") {

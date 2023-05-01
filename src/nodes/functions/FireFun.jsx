@@ -1,30 +1,45 @@
 
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 import { NodesContext } from '../../context/NodesContext';
 import CodeIcon from '@mui/icons-material/Code';
 function FireFun({ data , isConnectable ,list}) {
-    const [text, setText ]=useState('')
+    const [selected, setSelected ]=useState("")
     const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
+    const [options, setOptions ]=useState([])
 
-    useEffect(()=>{
-      setText(data?.value)
-    },[])
 
-    const run = (v,id)=> setNodes((nds) =>
+  useEffect(()=>{
+      setSelected(data?.selected||"")
+  },[])
+
+
+
+    useMemo(()=>{
+      let getOpt=[]
+      nodes.forEach((node,i) => {
+          if(node.type=="CreateFun"){
+            getOpt.push(node?.data?.value)
+          }
+      });
+      setOptions(getOpt)
+    },[nodes])
+
+
+
+
+
+    const run = (id)=> setNodes((nds) =>
         nds.map((node) => {
           if (node.id !== id) {
             return node;
           }
 
-          const value = v;
-
-
           return {
             ...node,
             data: {
               ...node.data,
-              value,
+              selected,
             },
           };
         })
@@ -33,8 +48,8 @@ function FireFun({ data , isConnectable ,list}) {
 
 
     useEffect(() => {
-      run(text,data?.id)
-    }, [text])
+      run(data?.id)
+    }, [selected])
     
 
   return (
@@ -48,7 +63,18 @@ function FireFun({ data , isConnectable ,list}) {
             </>
         }
         <label className='text-[#333] pr-2'>fire <CodeIcon/></label>
-        <input style={{width:2+text?.length+"ch",background:text?.includes(" ")?"#fdd":"#eee"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-full bg-[#eee] px-2 outline-none   text-[#333] '/>
+    <select
+      value={selected}
+      onChange={e => setSelected(e.target.value)} // ... and update the state variable on any change!
+      className='bg-gray-200 outline-none p-1 ml-1 rounded-md'
+      style={{width:selected.length+3+"ch"}}
+    >
+      {options.map((option,key)=>{
+        return (
+            <option key={key} value={option}>{option}</option>
+        )
+      })}
+    </select>
     </div>
   );
 }
