@@ -40,6 +40,35 @@ import Display from "./nodes/output/Display.jsx";
 import Button from "./nodes/Elements/Button.jsx";
 import DivElm from "./nodes/Elements/Div.jsx";
 import Screen from "./nodes/output/Screen.jsx";
+import And from "./nodes/operators/And.jsx";
+import Or from "./nodes/operators/Or.jsx";
+import Not from "./nodes/operators/Not.jsx";
+import SetText from "./nodes/control/SetText.jsx";
+import Input from "./nodes/Elements/Input.jsx";
+import SetValue from "./nodes/control/SetValue.jsx";
+import GetValue from "./nodes/control/GetValue.jsx";
+import Text from "./nodes/Elements/Text.jsx";
+import CreateFun from "./nodes/functions/CreateFun.jsx";
+import FireFun from "./nodes/functions/FireFun.jsx";
+import Style from "./nodes/Style/Style.jsx";
+import GetStyle from "./nodes/Style/GetStyle.jsx";
+import BackgroundC from "./nodes/Style/Background.jsx"
+import Color from "./nodes/Style/Color.jsx";
+import FontSize from "./nodes/Style/Fontsize.jsx";
+import SetStyle from "./nodes/control/SetStyle.jsx";
+import CreateArray from "./nodes/variables/CreateArray.jsx";
+import ArrayItem from "./nodes/variables/ArrayItem.jsx";
+import GetItem from "./nodes/variables/GetItem.jsx";
+import ChangeVarBy from "./nodes/variables/ChangeVarBy.jsx";
+import LoopIndex from "./nodes/control/LoopIndex.jsx";
+import SetParam from "./nodes/functions/SetParam.jsx";
+import GetParam from "./nodes/functions/GetParam.jsx";
+import RandomNum from "./nodes/math/RandomNum.jsx";
+import Return from "./nodes/functions/Return.jsx";
+import WidthVal from "./nodes/Style/WidthVal.jsx";
+import HightVal from "./nodes/Style/HightVal.jsx";
+import DisplayCss from "./nodes/Style/display.jsx";
+import FlexDir from "./nodes/Style/FlexDir.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -76,11 +105,27 @@ const initialNodes = [
 
 // we define the nodeTypes outside of the component to prevent re-renderings
 // you could also use useMemo inside the component
+
+let id = Math.random();
+const getId = () => `node_${id++}`;
+
+
+
+
+
+
+
+
+
+
+
+
 const nodeTypes = {
   Output: OutputNode,
   Display,
 
   If: IfNode,
+  LoopIndex,
 
   text: TextNode,
   number: NumberNode,
@@ -93,23 +138,61 @@ const nodeTypes = {
   Equal: EqualNode,
   Bigger: BiggerNode,
   Smaller: SmallerNode,
+  SetText,
+  SetValue,
+  GetValue,
+  SetStyle,
 
   Add: AddNode,
   Sub: SubNode,
   Mul: MulNode,
   Div: DivNode,
+  RandomNum,
 
   CreateVar,
   GetVar,
   SetVar,
+  CreateArray,
+  ArrayItem,
+  GetItem,
+  ChangeVarBy,
+
+  And,Or,Not,
 
   Button,
   DivElm,
   Screen,
+  Input,
+  Text,
+
+  CreateFun,
+  FireFun,
+  SetParam,
+  GetParam,
+  Return,
+
+  Style,
+  GetStyle,
+  Background:BackgroundC,
+  Color,
+  FontSize,
+  WidthVal,
+  HightVal,
+  DisplayCss,
+  FlexDir,
 };
 
-let id = Math.random();
-const getId = () => `node_${id++}`;
+
+
+
+
+
+
+
+
+
+
+
 
 function Flow() {
   const edgeUpdateSuccessful = useRef(true);
@@ -141,11 +224,15 @@ function Flow() {
 
 
 
-
   const [nodesArray, setNodeArray] = useState([
     { node: <StartNode list={true} />, type: "Start",cat:"control" },
     { node: <IfNode list={true} />, type: "If",cat:"control" },
     { node: <LoopNode list={true} />, type: "Loop" ,cat:"control"},
+    { node: <LoopIndex list={true} />, type: "LoopIndex" ,cat:"control"},
+    { node: <SetText list={true} />, type: "SetText" ,cat:"control"},
+    { node: <SetValue list={true} />, type: "SetValue" ,cat:"control"},
+    { node: <SetStyle list={true} />, type: "SetStyle" ,cat:"control"},
+    { node: <GetValue list={true} />, type: "GetValue" ,cat:"control"},
 
     { node: <TextNode list={true} />, type: "text",cat:"input" },
     { node: <NumberNode list={true} />, type: "number",cat:"input" },
@@ -160,20 +247,47 @@ function Flow() {
     { node: <EqualNode list={true} />, type: "Equal" , cat:"operators"},
     { node: <BiggerNode list={true} />, type: "Bigger", cat:"operators" },
     { node: <SmallerNode list={true} />, type: "Smaller", cat:"operators" },
+    { node: <And list={true} />, type: "And", cat:"operators" },
+    { node: <Or list={true} />, type: "Or", cat:"operators" },
+    { node: <Not list={true} />, type: "Not", cat:"operators" },
 
     { node: <AddNode list={true} />, type: "Add", cat:"math" },
     { node: <SubNode list={true} />, type: "Sub", cat:"math" },
     { node: <MulNode list={true} />, type: "Mul", cat:"math" },
     { node: <DivNode list={true} />, type: "Div", cat:"math" },
+    { node: <RandomNum list={true} />, type: "RandomNum", cat:"math" },
 
 
     { node: <CreateVar list={true} />, type: "CreateVar",cat:"variables" },
     { node: <SetVar list={true} />, type: "SetVar",cat:"variables" },
     { node: <GetVar list={true} />, type: "GetVar",cat:"variables" },
+    { node: <CreateArray list={true} />, type: "CreateArray",cat:"variables" },
+    { node: <ArrayItem list={true} />, type: "ArrayItem",cat:"variables" },
+    { node: <GetItem list={true} />, type: "GetItem",cat:"variables" },
+    { node: <ChangeVarBy list={true} />, type: "ChangeVarBy",cat:"variables" },
+
+    { node: <CreateFun list={true} />, type: "CreateFun",cat:"functions" },
+    { node: <FireFun list={true} />, type: "FireFun",cat:"functions" },
+    { node: <SetParam list={true} />, type: "SetParam",cat:"functions" },
+    { node: <GetParam list={true} />, type: "GetParam",cat:"functions" },
+    { node: <Return list={true} />, type: "Return",cat:"functions" },
 
 
     { node: <Button list={true} />, type: "Button",cat:"elements" },
     { node: <DivElm list={true} />, type: "DivElm",cat:"elements" },
+    { node: <Input list={true} />, type: "Input",cat:"elements" },
+    { node: <Text list={true} />, type: "Text",cat:"elements" },
+
+
+    { node: <Style list={true} />, type: "Style",cat:"style" },
+    { node: <GetStyle list={true} />, type: "GetStyle",cat:"style" },
+    { node: <BackgroundC list={true} />, type: "Background",cat:"style" },
+    { node: <Color list={true} />, type: "Color",cat:"style" },
+    { node: <FontSize list={true} />, type: "FontSize",cat:"style" },
+    { node: <WidthVal list={true} />, type: "WidthVal",cat:"style" },
+    { node: <HightVal list={true} />, type: "HightVal",cat:"style" },
+    { node: <DisplayCss list={true} />, type: "DisplayCss",cat:"style" },
+    { node: <FlexDir list={true} />, type: "FlexDir",cat:"style" },
   ]);
 
   
@@ -259,7 +373,7 @@ function Flow() {
         data: { onChange: onChange , text: "" ,id:newNode.id},
       }
 
-      setNodes((nds) => nds.concat(type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"?newTextNode:newNode));
+      setNodes((nds) => nds.concat(newTextNode));
     },
     [reactFlowInstance]
   );
@@ -271,11 +385,11 @@ function Flow() {
 
   return (
     <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange,display,setDisplay }}>
-      <div className="flex flex-col w-screen h-screen">
+      <div className="flex flex-col w-screen h-screen ">
         <ReactFlowProvider >
           <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
 
-            <div className="w-[200px] border-r border-[#fff3] bg-[#fff] flex flex-col">
+            <div className="w-[250px] border-r border-[#fff3] bg-[#fff] flex flex-col">
               <h1 className="text-gray-700 text-2xl p-3">Nodes</h1>
 
               <div className="flex flex-col items-start justify-start px-3 overflow-y-auto flex-1">
@@ -324,7 +438,6 @@ function Flow() {
               connectionLineStyle={connectionLineStyle}
               defaultEdgeOptions={edgeOptions}
               style={rfStyle}
-              snapToGrid
             >
               <Controls className="bg-white" />
               <MiniMap zoomable pannable className="bg-gray-400" />

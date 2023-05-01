@@ -46,7 +46,7 @@ function Ask({ data , isConnectable ,list}) {
             !list&&
         <Handle className='rounded-lg h-4' type="target" id="source" position={Position.Left} isConnectable={isConnectable} />
         }
-        <p className='text-[#333] pr-2'>ask</p>
+        <label className='text-[#333] pr-2'>ask</label>
         <input style={{width:2+text?.length+"ch"}} value={text} onChange={(e)=>setText(e.target.value)} className=' min-w-[30px] rounded-sm bg-[#eee] px-2 outline-none   text-[#333] '/>
     </div>
   );

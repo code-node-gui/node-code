@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;800;900&family=Courier+Prime:wght@400;700&display=swap');
 
 *{
     font-family: 'Barlow', sans-serif;
@@ -52,7 +51,6 @@ input[type=number] {
   background: #d0d0d2;
 }
 #displayRoot{
-  background-color: #eee;
   margin: 2px;
   padding: 2px;
   display: flex;
@@ -64,4 +62,18 @@ input[type=number] {
   padding: 2px 8px;
   border-radius: 6px;
   margin:1px;
+  flex: 1;
+}
+#displayRoot input{
+  background-color: #fff;
+  border: 1px solid #aaa;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin:2px;
+  min-width: none;
+  flex: 1;
+}
+#displayRoot div{
+  display: flex;
+  flex-direction: row;
 }
