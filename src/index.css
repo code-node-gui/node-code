@@ -55,7 +55,6 @@ input[type=number] {
   padding: 2px;
   display: flex;
   flex-direction: column;
-  width: 100%;
 }
 #displayRoot button{
   background-color: #fff;

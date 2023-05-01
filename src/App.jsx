@@ -65,6 +65,10 @@ import SetParam from "./nodes/functions/SetParam.jsx";
 import GetParam from "./nodes/functions/GetParam.jsx";
 import RandomNum from "./nodes/math/RandomNum.jsx";
 import Return from "./nodes/functions/Return.jsx";
+import WidthVal from "./nodes/Style/WidthVal.jsx";
+import HightVal from "./nodes/Style/HightVal.jsx";
+import DisplayCss from "./nodes/Style/display.jsx";
+import FlexDir from "./nodes/Style/FlexDir.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -172,6 +176,10 @@ const nodeTypes = {
   Background:BackgroundC,
   Color,
   FontSize,
+  WidthVal,
+  HightVal,
+  DisplayCss,
+  FlexDir,
 };
 
 
@@ -276,6 +284,10 @@ function Flow() {
     { node: <BackgroundC list={true} />, type: "Background",cat:"style" },
     { node: <Color list={true} />, type: "Color",cat:"style" },
     { node: <FontSize list={true} />, type: "FontSize",cat:"style" },
+    { node: <WidthVal list={true} />, type: "WidthVal",cat:"style" },
+    { node: <HightVal list={true} />, type: "HightVal",cat:"style" },
+    { node: <DisplayCss list={true} />, type: "DisplayCss",cat:"style" },
+    { node: <FlexDir list={true} />, type: "FlexDir",cat:"style" },
   ]);
 
   
@@ -361,7 +373,7 @@ function Flow() {
         data: { onChange: onChange , text: "" ,id:newNode.id},
       }
 
-      setNodes((nds) => nds.concat(type=="GetParam"||type=="SetParam"||type=="ChangeVarBy"||type=="GetItem"||type=="ArrayItem"||type=="SetStyle"||type=="GetStyle"||type=="Style"|| type=="text"|| type=="Ask" ||type=="number"||type=="CreateVar"||type=="SetVar"||type=="GetVar"||type=="SetText"||type=="SetValue"||type=="GetValue" ||type=="CreateFun"||type=="FireFun" ?newTextNode:newNode));
+      setNodes((nds) => nds.concat(newTextNode));
     },
     [reactFlowInstance]
   );

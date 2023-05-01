@@ -40,9 +40,9 @@ function Output() {
     }
   }, [resultUp, start]);
 
-  useEffect(() => {
-    setStart(false);
-  }, [nodes]);
+  // useEffect(() => {
+  //   setStart(false);
+  // }, [nodes]);
 
   const getNode = (node, sourceHandle) => {
     let a = edges.filter(
@@ -289,6 +289,26 @@ function Output() {
           fontSize: compiling(getNode(node, "value"), loopVar, fun),
           ...compiling(getNode(node, "next"), loopVar, fun),
         };
+      } else if (nodes[node]?.type == "WidthVal") {
+        return {
+          width: compiling(getNode(node, "value"), loopVar, fun),
+          ...compiling(getNode(node, "next"), loopVar, fun),
+        };
+      } else if (nodes[node]?.type == "HightVal") {
+        return {
+          height: compiling(getNode(node, "value"), loopVar, fun),
+          ...compiling(getNode(node, "next"), loopVar, fun),
+        };
+      } else if (nodes[node]?.type == "DisplayCss") {
+        return {
+          display: compiling(getNode(node, "value") , loopVar, fun)|| nodes[node]?.data?.value,
+          ...compiling(getNode(node, "next"), loopVar, fun),
+        };
+      } else if (nodes[node]?.type == "FlexDir") {
+        return {
+          flexDirection: compiling(getNode(node, "value") , loopVar, fun)|| nodes[node]?.data.value,
+          ...compiling(getNode(node, "next"), loopVar, fun),
+        };
       } else if (nodes[node]?.type == "CreateArray") {
         let a = [...compiling(getNode(node, "value"), loopVar, fun)].flat(
           Infinity
@@ -359,7 +379,7 @@ function Output() {
         </div>
       </div>
       <h1 className="mt-8   text-[#333]  text-xl px-3">Console</h1>
-      <div className="py-2 flex-1  overflow-auto w-full">
+      <div style={{}} className="py-2 flex-1  overflow-auto w-full">
         {result.map((line, key) => {
           return (
             <div
@@ -369,6 +389,7 @@ function Output() {
             ></div>
           );
         })}
+
       </div>
     </div>
   );
