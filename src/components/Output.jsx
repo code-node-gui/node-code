@@ -2,6 +2,8 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import { NodesContext } from "../context/NodesContext";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import { backdropClasses } from "@mui/material";
+import { StopRounded } from "@mui/icons-material";
+import PlayCircleFilledWhiteRoundedIcon from '@mui/icons-material/PlayCircleFilledWhiteRounded';
 
 var Console = [];
 function Output() {
@@ -373,26 +375,33 @@ function Output() {
     }
   };
   return (
-    <div className="flex flex-col h-screen items-start">
+    <div className={"flex flex-col px-2 w-[400px] h-screen items-start duration-300 transition-all "  } >
       <button
         onClick={() => {
           setStart((s) => !s);
         }}
-        className="border flex items-center gap-1 duration-150 hover:px-5 hover:gap-2 p-2 bg-[#eee] rounded-full px-4 m-2"
+        className={"border flex items-center gap-1 duration-150 p-2 w-28 justify-center text-white rounded-full px-4 my-2" + (!start?" bg-blue-400 ":" bg-red-400")}
       >
-        {start ? "stop" : "start"}
-        <PlayArrowRoundedIcon />
+        {!start ? 
+        <>start<PlayArrowRoundedIcon /></>
+        :
+        <>stop<StopRounded /></>
+         }
+        
+        
       </button>
-      <h1 id="out" className="mt-8   text-[#333]  text-xl px-3">
-        Output
-      </h1>
-      <div className="py-2 flex-1  overflow-auto w-full">
-        <div className="text-gray-600 px-3 break-all" id="displayRoot">
-          {resultDisplay && resultDisplay}
-        </div>
+      <div id="displayRoot" className="rounded-md h-[80%] bg-gray-200 border  overflow-auto w-full  resize vertical p-0">
+          {resultDisplay ? 
+          resultDisplay 
+          :
+          <div onClick={()=>setStart(p=>!p)} className="flex-1 duration-150 justify-center items-center text-blue-400 cursor-pointer hover:bg-gray-100 ">
+           <PlayCircleFilledWhiteRoundedIcon sx={{fontSize:"80px"}}/>
+          </div>
+           
+           }
       </div>
-      <h1 className="mt-8   text-[#333]  text-xl px-3">Console</h1>
-      <div style={{}} className="py-2 flex-1  overflow-auto w-full">
+      <h1 className="mt-4   text-[#333]  text-xl px-3">Output</h1>
+      <div style={{}} className="py-2   overflow-auto w-full">
         {result.map((line, key) => {
           return (
             <div
