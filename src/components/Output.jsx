@@ -69,7 +69,8 @@ function Output() {
   const getParamValue = (value, fun) => {
     let a = nodes.findIndex(
       (node) =>
-        node?.data?.value == fun?.fnName 
+        (
+        node?.data?.selected == fun?.fnName 
         &&
         node.type == "FireFun" 
         &&
