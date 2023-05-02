@@ -108,8 +108,6 @@ const initialNodes = [
 // we define the nodeTypes outside of the component to prevent re-renderings
 // you could also use useMemo inside the component
 
-let id = Math.random();
-const getId = () => `node_${id++}`;
 
 
 
@@ -370,7 +368,7 @@ function Flow() {
       });
 
       const newNode = {
-        id: type == "Start" ? "start" : getId(),
+        id: type == "Start" ? "start" : "node_"+Math.random(),
         type,
         position,
       };
@@ -404,7 +402,7 @@ function Flow() {
 
     selectedNodes.forEach((node)=>{
       const newNode = {
-        id: node.type == "Start" ? "start" : getId(),
+        id: node.type == "Start" ? "start" : "node_"+Math.random(),
         type:node.type,
         position:{x:node.position.x+20,y:node.position.y+20},
         selected:true
@@ -423,7 +421,7 @@ function Flow() {
       if(nodesId.includes(edge.source)&&nodesId.includes(edge.target)){
         let source =  duplicateNodes[selectedNodes.findIndex(node=>node.id == edge.source)].id
         let target =  duplicateNodes[selectedNodes.findIndex(node=>node.id == edge.target)].id
-        setEdges(eds=>eds.concat({...newEdge,source,target,id: getId()}))
+        setEdges(eds=>eds.concat({...newEdge,source,target,id: "edge"+Math.random()}))
       }
     
     })
