@@ -51,10 +51,10 @@ input[type=number] {
   background: #d0d0d2;
 }
 #displayRoot{
-  margin: 2px;
-  padding: 2px;
   display: flex;
   flex-direction: column;
+  max-width: 800px;
+  width: 100%;
 }
 #displayRoot button{
   background-color: #fff;
@@ -62,7 +62,6 @@ input[type=number] {
   padding: 2px 8px;
   border-radius: 6px;
   margin:1px;
-  flex: 1;
 }
 #displayRoot input{
   background-color: #fff;
@@ -70,14 +69,38 @@ input[type=number] {
   padding: 2px 8px;
   border-radius: 6px;
   margin:2px;
-  min-width: none;
-  flex: 1;
 }
 #displayRoot div{
   display: flex;
   flex-direction: row;
+  width:100%;
 }
 
+
+.ver-text{
+  text-align: start;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+.resize {
+  overflow:auto;
+  margin: 0;
+}
+.resize.horizontal {
+  resize: horizontal;
+}
+.resize.vertical {
+  resize: vertical;
+}
+.resize.both {
+  resize: both;
+}
+.wrap {
+  max-width: 80%;
+}
 
 
 

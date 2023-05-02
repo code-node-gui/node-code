@@ -205,6 +205,7 @@ function Flow() {
   const [display, setDisplay] = useState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
+  const [catSelected,setCatSelected]=useState("control")
 
  
 
@@ -389,18 +390,70 @@ function Flow() {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
+
+
+  useEffect(()=>{
+    
+  },[nodes])
+  
+  const duplicate=()=>{
+    const selectedNodes= nodes.filter(node=>node.selected==true)
+    const duplicateNodes=[]
+    const nodesId=selectedNodes.map(node=>node.id)
+    setNodes(nds=>nds.map(nd=>({...nd,selected:false})))
+
+    selectedNodes.forEach((node)=>{
+      const newNode = {
+        id: node.type == "Start" ? "start" : getId(),
+        type:node.type,
+        position:{x:node.position.x+20,y:node.position.y+20},
+        selected:true
+      };
+      const newTextNode={
+        ...newNode,
+        data:node.data 
+      }
+      duplicateNodes.push(newTextNode);
+    })
+
+    setNodes(nds=>nds.concat(duplicateNodes))
+
+    edges.forEach(edge=>{
+      let newEdge = edge
+      if(nodesId.includes(edge.source)&&nodesId.includes(edge.target)){
+        let source =  duplicateNodes[selectedNodes.findIndex(node=>node.id == edge.source)].id
+        let target =  duplicateNodes[selectedNodes.findIndex(node=>node.id == edge.target)].id
+        setEdges(eds=>eds.concat({...newEdge,source,target,id: getId()}))
+      }
+    
+    })
+  }
+
+
+
   return (
     <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange,display,setDisplay }}>
       <div className="flex flex-col w-screen h-screen ">
         <ReactFlowProvider >
-          <div className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
-
+          <div  className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
+            <div id="workspace" className="flex flex-col bg-gray-50">
+              {
+                cats.map((cat,key)=>{
+                  return(
+                  <button key={key} onClick={()=>setCatSelected(cat.name)} className={"p-2   py-4 "+(cat.name==catSelected?"bg-blue-400 text-white":" text-gray-700 ")}>
+                    <div className="ver-text">{cat.name}</div>
+                  </button>
+                  )
+                })
+              }
+            </div>
             <div className="w-[250px] border-r border-[#fff3] bg-[#fff] flex flex-col">
               <h1 className="text-gray-700 text-2xl p-3">Nodes</h1>
-
-              <div className="flex flex-col items-start justify-start px-3 overflow-y-auto flex-1">
+              <button className="bg-blue-200" onClick={()=>{duplicate()}}>duplicate</button>
+              <div className="flex flex-col items-start justify-start px-3 overflow-auto w-[250px] flex-1">
                 {
                   cats.map((cat,key1)=>{
+                    if (cat.name==catSelected) {
                     return(
                       <div key={key1} className="flex flex-col items-start">
                       <h3 className="text-gray-700 my-1 mt-4">{cat.name}</h3>
@@ -422,12 +475,13 @@ function Flow() {
                       }
                       </div>
                     )
+                    }
                   })
                 }
               </div>
             </div>
             <ReactFlow
-              className="flex-1"
+              className="resize horizontal flex-1 min-w-[800px]"
               nodes={nodes}
               edges={edges}
               onNodesChange={onNodesChange}
@@ -444,14 +498,15 @@ function Flow() {
               connectionLineStyle={connectionLineStyle}
               defaultEdgeOptions={edgeOptions}
               style={rfStyle}
+              selectionOnDrag
+              panOnDrag={panOnDrag}
+              selectionMode={SelectionMode.Partial}
             >
               <Controls className="bg-white" />
               <MiniMap zoomable pannable className="bg-gray-400" />
               <Background color="#ddd" variant={"lines"} />
             </ReactFlow>
-            <div className="w-[400px] bg-[#fff]">
                 <Output/>
-            </div>
           </div>
         </ReactFlowProvider>
       </div>

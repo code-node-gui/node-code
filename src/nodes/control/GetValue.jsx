@@ -4,9 +4,9 @@ import { Handle, Position } from 'reactflow';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
 import { NodesContext } from '../../context/NodesContext';
 
-function GetValue({ data , isConnectable ,list}) {
+function GetValue({ data ,id , isConnectable ,list,selected}) {
     const [text, setText ]=useState('')
-    const { nodes, setNodes, edges, onNodesChange } = useContext(NodesContext);
+    const { nodes, setNodes, edges ,setEdges, onNodesChange } = useContext(NodesContext);
 
 
     useEffect(()=>{
@@ -24,6 +24,7 @@ function GetValue({ data , isConnectable ,list}) {
 
           return {
             ...node,
+            expandParent:true,
             data: {
               ...node.data,
               value,
@@ -40,7 +41,7 @@ function GetValue({ data , isConnectable ,list}) {
     
 
   return (
-    <div className="  hover:scale-[1.025] duration-150  p-2 shadow-lg rounded-md flex bg-[#fffe] backdrop-blur-sm border ">
+    <div className={`  hover:scale-[1.025] duration-150  p-1 shadow-lg rounded-md px-4 flex bg-[#fffe] backdrop-blur-sm border border`}>
         {
             !list&&
             <>
