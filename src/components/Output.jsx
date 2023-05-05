@@ -67,15 +67,20 @@ function Output() {
   };
 
   const getParamValue = (value, fun) => {
+    console.log(value)
     let a = nodes.findIndex(
       (node) =>
-        node?.data?.value == fun?.fnName 
+        (
+        node?.data?.selected == fun?.fnName 
         &&
         node.type == "FireFun" 
         &&
         node.id == fun.fireId
+        )
     );
-    return compiling(getNode(a, "params"), null, fun)[value]
+    let b =compiling(getNode(a, "params"), null, fun) 
+    console.log(b)
+    return b || "hello"
   };
 
   var variables = [];
@@ -253,7 +258,7 @@ function Output() {
         });
         compiling(getNode(node, "next"), loopVar, fun);
       } else if (nodes[node]?.type == "GetValue") {
-        return window.document.getElementById(nodes[node]?.data?.value).value;
+        return window.document.getElementById(nodes[node]?.data?.value)?.value;
       } else if (nodes[node]?.type == "Text") {
         return (
           <Fragment key={Math.random()}>
@@ -339,7 +344,7 @@ function Output() {
         compiling(getNode(node, "next"), loopVar, fun)
       } else if (nodes[node]?.type == "SetParam") {
         return {
-          [nodes[node]?.data?.value]: compiling(
+          [ nodes[node]?.data?.value ]: compiling(
             getNode(node, "value", loopVar, fun)
           )||nodes[node]?.data?.value2,
           ...compiling(getNode(node, "next", loopVar, fun)),

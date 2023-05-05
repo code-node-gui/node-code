@@ -370,6 +370,8 @@ function Flow() {
         y: event.clientY - reactFlowBounds.top,
       });
 
+      
+
       const newNode = {
         id: type == "Start" ? "start" : "node_"+Math.random(),
         type,
@@ -391,19 +393,39 @@ function Flow() {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
+  const copyToClipBoard=()=>{
+    const selectedNodes= nodes.filter(node=>node.selected==true)
+    navigator.clipboard.writeText(JSON.stringify(selectedNodes));
+  }
 
 
   useEffect(()=>{
-    
+    const displayEvntKey = function(event) {
+        if (event.ctrlKey && event.key == "c") {
+          copyToClipBoard()
+        }
+        if (event.ctrlKey && event.key == "v") {
+          past()
+      }
+    }
+
+    document.addEventListener("keydown", displayEvntKey)
+    return () => document.removeEventListener("keydown", displayEvntKey)
   },[nodes])
   
-  const duplicate=()=>{
-    const selectedNodes= nodes.filter(node=>node.selected==true)
-    const duplicateNodes=[]
-    const nodesId=selectedNodes.map(node=>node.id)
+  const past=()=>{
+    navigator.clipboard.readText().then(get => {
+      const selectedNodes=JSON.parse(get)
+      if(selectedNodes){
+
+        
+        const duplicateNodes=[]
+        const nodesId=selectedNodes.map(node=>node.id)
     setNodes(nds=>nds.map(nd=>({...nd,selected:false})))
 
+
     selectedNodes.forEach((node)=>{
+
       const newNode = {
         id: node.type == "Start" ? "start" : "node_"+Math.random(),
         type:node.type,
@@ -412,13 +434,13 @@ function Flow() {
       };
       const newTextNode={
         ...newNode,
-        data:node.data 
+        data:{...node.data,id:newNode.id}
       }
       duplicateNodes.push(newTextNode);
     })
-
+    
     setNodes(nds=>nds.concat(duplicateNodes))
-
+    
     edges.forEach(edge=>{
       let newEdge = edge
       if(nodesId.includes(edge.source)&&nodesId.includes(edge.target)){
@@ -429,8 +451,11 @@ function Flow() {
     
     })
   }
+  });
+  }
 
 
+  
 
   return (
     <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange,display,setDisplay }}>
