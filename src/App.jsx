@@ -71,6 +71,7 @@ import DisplayCss from "./nodes/Style/display.jsx";
 import FlexDir from "./nodes/Style/FlexDir.jsx";
 import Flex from "./nodes/Style/Flex.jsx";
 import AddToArray from "./nodes/variables/AddToArray.jsx";
+import { selectClasses } from "@mui/material";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -367,6 +368,8 @@ function Flow() {
         y: event.clientY - reactFlowBounds.top,
       });
 
+      
+
       const newNode = {
         id: type == "Start" ? "start" : "node_"+Math.random(),
         type,
@@ -388,19 +391,39 @@ function Flow() {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
+  const copyToClipBoard=()=>{
+    const selectedNodes= nodes.filter(node=>node.selected==true)
+    navigator.clipboard.writeText(JSON.stringify(selectedNodes));
+  }
 
 
   useEffect(()=>{
-    
+    const displayEvntKey = function(event) {
+        if (event.ctrlKey && event.key == "c") {
+          copyToClipBoard()
+        }
+        if (event.ctrlKey && event.key == "v") {
+          past()
+      }
+    }
+
+    document.addEventListener("keydown", displayEvntKey)
+    return () => document.removeEventListener("keydown", displayEvntKey)
   },[nodes])
   
-  const duplicate=()=>{
-    const selectedNodes= nodes.filter(node=>node.selected==true)
-    const duplicateNodes=[]
-    const nodesId=selectedNodes.map(node=>node.id)
+  const past=()=>{
+    navigator.clipboard.readText().then(get => {
+      const selectedNodes=JSON.parse(get)
+      if(selectedNodes){
+
+        
+        const duplicateNodes=[]
+        const nodesId=selectedNodes.map(node=>node.id)
     setNodes(nds=>nds.map(nd=>({...nd,selected:false})))
 
+
     selectedNodes.forEach((node)=>{
+
       const newNode = {
         id: node.type == "Start" ? "start" : "node_"+Math.random(),
         type:node.type,
@@ -409,13 +432,13 @@ function Flow() {
       };
       const newTextNode={
         ...newNode,
-        data:node.data 
+        data:{...node.data,id:newNode.id}
       }
       duplicateNodes.push(newTextNode);
     })
-
+    
     setNodes(nds=>nds.concat(duplicateNodes))
-
+    
     edges.forEach(edge=>{
       let newEdge = edge
       if(nodesId.includes(edge.source)&&nodesId.includes(edge.target)){
@@ -426,8 +449,11 @@ function Flow() {
     
     })
   }
+  });
+  }
 
 
+  
 
   return (
     <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange,display,setDisplay }}>
@@ -447,7 +473,6 @@ function Flow() {
             </div>
             <div className="w-[250px] border-r border-[#fff3] bg-[#fff] flex flex-col">
               <h1 className="text-gray-700 text-2xl p-3">Nodes</h1>
-              <button className="bg-blue-200" onClick={()=>{duplicate()}}>duplicate</button>
               <div className="flex flex-col items-start justify-start px-3 overflow-auto w-[250px] flex-1">
                 {
                   cats.map((cat,key1)=>{
