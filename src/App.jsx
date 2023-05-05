@@ -71,7 +71,7 @@ import DisplayCss from "./nodes/Style/display.jsx";
 import FlexDir from "./nodes/Style/FlexDir.jsx";
 import Flex from "./nodes/Style/Flex.jsx";
 import AddToArray from "./nodes/variables/AddToArray.jsx";
-import { selectClasses } from "@mui/material";
+import Sleep from "./nodes/control/Sleep.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -143,6 +143,7 @@ const nodeTypes = {
   SetValue,
   GetValue,
   SetStyle,
+  Sleep,
 
   Add: AddNode,
   Sub: SubNode,
@@ -237,6 +238,7 @@ function Flow() {
     { node: <SetValue list={true} />, type: "SetValue" ,cat:"control"},
     { node: <SetStyle list={true} />, type: "SetStyle" ,cat:"control"},
     { node: <GetValue list={true} />, type: "GetValue" ,cat:"control"},
+    { node: <Sleep list={true} />, type: "Sleep" ,cat:"control"},
 
     { node: <TextNode list={true} />, type: "text",cat:"input" },
     { node: <NumberNode list={true} />, type: "number",cat:"input" },

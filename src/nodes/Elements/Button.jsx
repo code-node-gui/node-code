@@ -62,8 +62,8 @@ function Button({ data, isConnectable,list,selected }) {
         <label htmlFor="text" className={`text-end text-sm   text-[#333]  `}>click</label>
         <label htmlFor="text" className={`text-end text-sm   text-[#333]   `}>style</label>
         <Handle  className='top-[48px] rounded-full h-3' type="source" position={Position.Right} id="value" isConnectable={isConnectable} />
-        <Handle className='top-[110px]' type="source" position={Position.Right} id="name" isConnectable={isConnectable} />
-        <Handle className='top-[80px]' type="source" position={Position.Right} id="click" isConnectable={isConnectable} />
+        <Handle className='top-[80px]' type="source" position={Position.Right} id="name" isConnectable={isConnectable} />
+        <Handle className='top-[110px]' type="source" position={Position.Right} id="click" isConnectable={isConnectable} />
         <Handle className='top-[130px]' type="source" position={Position.Right} id="style" isConnectable={isConnectable} />
         <Handle  type="source" position={Position.Bottom} id="next" isConnectable={isConnectable} />
   </>
