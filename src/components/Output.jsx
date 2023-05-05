@@ -369,6 +369,15 @@ function Output() {
 
       } else if (nodes[node]?.type == "Return") {
         return (compiling(getNode(node, "value"), loopVar, fun))
+
+      } else if (nodes[node]?.type == "Sleep"){
+        async function b () {
+            const a =await setTimeout(() => {
+                compiling(getNode(node, "next"), loopVar, fun)
+            }, 1000*Number(nodes[node].data.value));
+            return a 
+        }
+        return b()
       } else {
         compiling(null);
       }

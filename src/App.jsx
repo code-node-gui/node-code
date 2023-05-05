@@ -71,6 +71,7 @@ import DisplayCss from "./nodes/Style/display.jsx";
 import FlexDir from "./nodes/Style/FlexDir.jsx";
 import Flex from "./nodes/Style/Flex.jsx";
 import AddToArray from "./nodes/variables/AddToArray.jsx";
+import Sleep from "./nodes/control/Sleep.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -142,6 +143,7 @@ const nodeTypes = {
   SetValue,
   GetValue,
   SetStyle,
+  Sleep,
 
   Add: AddNode,
   Sub: SubNode,
@@ -236,6 +238,7 @@ function Flow() {
     { node: <SetValue list={true} />, type: "SetValue" ,cat:"control"},
     { node: <SetStyle list={true} />, type: "SetStyle" ,cat:"control"},
     { node: <GetValue list={true} />, type: "GetValue" ,cat:"control"},
+    { node: <Sleep list={true} />, type: "Sleep" ,cat:"control"},
 
     { node: <TextNode list={true} />, type: "text",cat:"input" },
     { node: <NumberNode list={true} />, type: "number",cat:"input" },
@@ -447,7 +450,6 @@ function Flow() {
             </div>
             <div className="w-[250px] border-r border-[#fff3] bg-[#fff] flex flex-col">
               <h1 className="text-gray-700 text-2xl p-3">Nodes</h1>
-              <button className="bg-blue-200" onClick={()=>{duplicate()}}>duplicate</button>
               <div className="flex flex-col items-start justify-start px-3 overflow-auto w-[250px] flex-1">
                 {
                   cats.map((cat,key1)=>{
