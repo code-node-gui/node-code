@@ -80,7 +80,7 @@ function Output() {
     );
     let b =compiling(getNode(a, "params"), null, fun) 
     console.log(b)
-    return b || "hello"
+    return b[value]
   };
 
   var variables = [];
@@ -405,7 +405,7 @@ function Output() {
         
       </button>
       <div id="displayRoot" className="rounded-md h-[80%] bg-gray-200 border  overflow-auto w-full  resize vertical p-0">
-          {resultDisplay ? 
+          {start ? 
           resultDisplay 
           :
           <div onClick={()=>setStart(p=>!p)} className="flex-1 duration-150 justify-center items-center text-blue-400 cursor-pointer hover:bg-gray-100 ">
