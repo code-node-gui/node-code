@@ -127,7 +127,7 @@ function Output({screen}) {
           index < compiling(getNode(node, "times"), loopVar, fun);
           index++
         ) {
-          compiling(getNode(node, "do"), index, fun);
+          compiling(getNode(node, "do"), {...loopVar,[nodes[node].data.value]:index}, fun);
         }
       } else if (nodes[node]?.type == "ReturningLoop") {
         // for (
@@ -377,7 +377,7 @@ function Output({screen}) {
         );
         compiling(getNode(node, "next"), loopVar, fun);
       } else if (nodes[node]?.type == "LoopIndex") {
-        return loopVar;
+        return loopVar[nodes[node].data.value];
       } else if (nodes[node]?.type == "RandomNum") {
 
         const randomNumber=(b=0, a=1)=> {
