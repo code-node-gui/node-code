@@ -389,7 +389,7 @@ function Output() {
     }
   };
   return (
-    <div className={"flex flex-col px-2 w-[400px] h-screen items-start duration-300 transition-all "  } >
+    <div className={"flex flex-col px-2 w-[400px]  items-start duration-300 transition-all "  } >
       <button
         onClick={() => {
           setStart((s) => !s);
