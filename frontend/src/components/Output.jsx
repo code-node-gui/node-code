@@ -1,12 +1,12 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import { NodesContext } from "../context/NodesContext";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-import { backdropClasses } from "@mui/material";
+import { Button, backdropClasses } from "@mui/material";
 import { StopRounded } from "@mui/icons-material";
 import PlayCircleFilledWhiteRoundedIcon from '@mui/icons-material/PlayCircleFilledWhiteRounded';
 
 var Console = [];
-function Output() {
+function Output({screen}) {
   const { nodes, setNodes, edges, onNodesChange, display, setDisplay } =
     useContext(NodesContext);
   const [result, setResult] = useState(["show output here"]);
@@ -97,6 +97,8 @@ function Output() {
           compiling(getNode(node, "else"), loopVar, fun);
         }
         compiling(getNode(node, "next"), loopVar, fun);
+      } else if (nodes[node]?.type == "ReturningIf") {
+        return compiling(getNode(node, "condition"),loopVar,fun) ? compiling(getNode(node, "do"), loopVar, fun) : compiling(getNode(node, "else"), loopVar, fun)
       } else if (nodes[node]?.type == "TrueNode") {
         return true;
       } else if (nodes[node]?.type == "FalseNode") {
@@ -127,6 +129,20 @@ function Output() {
         ) {
           compiling(getNode(node, "do"), index, fun);
         }
+      } else if (nodes[node]?.type == "ReturningLoop") {
+        // for (
+        //   let index = 0;
+        //   index < compiling(getNode(node, "times"), loopVar, fun);
+        //   index++
+        // ) {
+        //   compiling(getNode(node, "do"), index, fun);
+        // }
+        let a = new Array(compiling(getNode(node,"times"),loopVar,fun)).fill("nothing")
+        let b = a.map((item,key)=>{
+          return compiling(getNode(node, "do"), key, fun);
+        })
+        return b
+
       } else if (nodes[node]?.type == "Equal") {
         return (
           compiling(getNode(node, "first"), loopVar, fun) ===
@@ -206,14 +222,14 @@ function Output() {
         let a = compiling(getNode(node, "value"), loopVar, fun)||nodes[node].data?.text;
         return (
           <Fragment key={Math.random()}>
-            <button
+            <Button
               id={compiling(getNode(node, "name"), loopVar, fun)||nodes[node].data?.name}
               style={{ ...compiling(getNode(node, "style"), loopVar, fun) }}
               key={Math.random()}
               onClick={() => compiling(getNode(node, "click"), loopVar, fun)}
             >
               {a}
-            </button>{" "}
+            </Button>{" "}
             {compiling(getNode(node, "next"), loopVar, fun)}
           </Fragment>
         );
@@ -389,7 +405,8 @@ function Output() {
     }
   };
   return (
-    <div className={"flex flex-col px-2 w-[400px] h-screen items-start duration-300 transition-all "  } >
+    <div className={"flex flex-col  overflow-y-scroll h-full px-2  items-start duration-300 transition-all "+(screen==1?"w-full":"w-[400px] ") } >
+      
       <button
         onClick={() => {
           setStart((s) => !s);
@@ -404,7 +421,9 @@ function Output() {
         
         
       </button>
-      <div id="displayRoot" className="rounded-md h-[80%] bg-gray-200 border  overflow-auto w-full  resize vertical p-0">
+      <div className={"flex h-full overflow-hidden flex-1 w-full "+(screen==1?"flex-row pb-4":"flex-col")}>
+
+      <div id="displayRoot" className={"rounded-md bg-gray-200 border  overflow-y-scroll  resize max-w-none  vertical p-0 "+(screen==1?" both":" h-[80%] ")}>
           {start ? 
           resultDisplay 
           :
@@ -414,6 +433,8 @@ function Output() {
            
            }
       </div>
+      <div className={"w-fit min-w-[200px] min-h-24"+(screen==1&&" flex-1")}>
+
       <h1 className="mt-4   text-[#333]  text-xl px-3">Output</h1>
       <div style={{}} className="py-2   overflow-auto w-full">
         {result.map((line, key) => {
@@ -425,6 +446,9 @@ function Output() {
             ></div>
           );
         })}
+
+      </div>
+      </div>
 
       </div>
     </div>
