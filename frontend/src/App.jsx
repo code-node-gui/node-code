@@ -28,6 +28,8 @@ import { SettingsBrightness } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
 
 import allNodesArray, { nodeType } from "./assets/nodesArray"
+import NodeCats from "./components/nodeCats.jsx";
+import NavBar from "./components/NavBar.jsx";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -86,8 +88,7 @@ function Flow() {
 
 
 
-  const [nodesArray, setNodeArray] = useState(allNodesArray);
-
+  const [screen,setScreen]=useState(0)
   
 
 
@@ -250,6 +251,7 @@ function Flow() {
   const HandleCatSelect=(catName)=>{
       if(catName==catSelected){
         setLeftMenu(p=>!p)
+        setCatSelected('nothing')
       }else{
         setCatSelected(catName)
         setLeftMenu(true)
@@ -259,7 +261,7 @@ function Flow() {
     <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange,display,setDisplay }}>
       <div className="flex flex-col w-screen h-screen ">
 
-        <div className="w-full bg-white border-b flex justify-center gap-1 ">
+        <div className="w-full bg-white border-b flex px-4 gap-1 ">
           <button className="px-4 py-2 mt-1 rounded-t-xl border bg-blue-400 text-white">App</button>
           <button className="px-4 py-2 mt-1 rounded-t-xl border ">homepage</button>
           <button className="px-8 py-2 mt-1 rounded-t-xl border  ">+</button>
@@ -267,26 +269,26 @@ function Flow() {
 
         <ReactFlowProvider >
           <div  className="flex-1 h-full w-full flex" ref={reactFlowWrapper}>
-            <div id="workspace" className="flex items-center justify-between flex-col bg-gray-50">
-              <div className="flex flex-col">
-              {
-                cats.map((cat,key)=>{
-                  return(
-                  <button key={key} onClick={()=>HandleCatSelect(cat.name)} className={"px-3   py-2 "+(cat.name==catSelected?"bg-blue-400 text-white":" text-gray-700 ")}>
-                    <div className="text-sm font-semibold text-start">{cat.name}</div>
-                  </button>
-                  )
-                })
-              }
-              </div>
-               <Avatar src="https://media.licdn.com/dms/image/D4E03AQHeSrHnPRoVLw/profile-displayphoto-shrink_800_800/0/1682257781027?e=2147483647&v=beta&t=lggJy-TJsQPuvLs29DtTaELPFL-xJt9ptrZ87zcVuSs" className="m-4 cursor-pointer"/>
+            <NavBar screen={screen} setScreen={setScreen}/>
+
+          {
+            screen==1 && 
+            <div className="flex justify-center  flex-1">
+              <Output screen={screen}/>
             </div>
+          }
+
+          {
+            screen==0 && <>
+
+
+            <NodeCats HandleCatSelect={HandleCatSelect} catSelected={catSelected}/>
             {
               leftMenu &&
               <NodeBar catSelected={catSelected} onDragStart={onDragStart}/>
             }
             <ReactFlow
-              className="resize horizontal flex-1 min-w-[800px]"
+              className="resize horizontal flex-1 min-w-[800px] "
               nodes={nodes}
               edges={edges}
               onNodesChange={onNodesChange}
@@ -309,7 +311,7 @@ function Flow() {
             >
               <Controls className="bg-white" />
               <MiniMap zoomable pannable className="bg-gray-400" />
-              <Background color="#ddd" variant={"lines"} />
+              <Background className="bg-transparent" color="#ddd" variant={"lines"} />
             </ReactFlow>
             <button onClick={()=>setRightMenu(p=>!p)} className="absolute p-2 rounded-md right-2 top-14 text-white bg-blue-400 ">
               {
@@ -321,8 +323,12 @@ function Flow() {
               </button>
             {
               RightMenu &&
-                <Output/>
+                <Output screen={screen}/>
             }
+
+            </>
+          }
+
           </div>
         </ReactFlowProvider>
       </div>

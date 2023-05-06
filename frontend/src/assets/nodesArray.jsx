@@ -54,6 +54,8 @@ import FlexDir from "../nodes/Style/FlexDir.jsx";
 import Flex from "../nodes/Style/Flex.jsx";
 import AddToArray from "../nodes/variables/AddToArray.jsx";
 import Sleep from "../nodes/control/Sleep.jsx"
+import ReturningLoop from "../nodes/control/ReturningLoop.jsx";
+import ReturningIf from "../nodes/control/ReturningIf.jsx";
 
 
 
@@ -67,6 +69,8 @@ export default [
     { node: <SetStyle list={true} />, type: "SetStyle" ,cat:"control"},
     { node: <GetValue list={true} />, type: "GetValue" ,cat:"control"},
     { node: <Sleep list={true} />, type: "Sleep" ,cat:"control"},
+    { node: <ReturningLoop list={true} />, type: "ReturningLoop" ,cat:"control"},
+    { node: <ReturningIf list={true} />, type: "ReturningIf" ,cat:"control"},
 
     { node: <TextNode list={true} />, type: "text",cat:"input" },
     { node: <NumberNode list={true} />, type: "number",cat:"input" },
@@ -74,7 +78,7 @@ export default [
 
     { node: <OutputNode list={true} />, type: "Output",cat:"output" },
     { node: <Display list={true} />, type: "Display",cat:"output" },
-    // { node: <Screen list={true} />, type: "Screen",cat:"output" },
+    { node: <Screen list={true} />, type: "Screen",cat:"output" },
 
     { node: <TrueNode list={true} />, type: "TrueNode",cat:"operators" },
     { node: <FalseNode list={true} />, type: "FalseNode",cat:"operators" },
@@ -133,6 +137,8 @@ export default [
 export const nodeType = {
   Output: OutputNode,
   Display,
+  ReturningLoop,
+  ReturningIf,
 
   If: IfNode,
   LoopIndex,
