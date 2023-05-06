@@ -433,7 +433,7 @@ function Output({screen}) {
            
            }
       </div>
-      <div className={"w-fit min-h-24"+(screen==1&&" flex-1")}>
+      <div className={"w-fit min-w-[200px] min-h-24"+(screen==1&&" flex-1")}>
 
       <h1 className="mt-4   text-[#333]  text-xl px-3">Output</h1>
       <div style={{}} className="py-2   overflow-auto w-full">
