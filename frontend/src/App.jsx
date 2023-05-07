@@ -66,11 +66,15 @@ function Flow() {
 
   const [leftMenu,setLeftMenu]=useState(false);
   const [RightMenu,setRightMenu]=useState(false);
- 
+
+
+  const [scrn,setScrn]=useState("app");
+  const [scrns,setScrns]=useState(["app","styles"])
 
   useMemo(()=>{
     setEdges(JSON.parse(localStorage.getItem("edges"))||[])
     setNodes(JSON.parse(localStorage.getItem("nodes"))||[])
+    setScrns(JSON.parse(localStorage.getItem("screens"))||["app","styles"])
     componentDidMount()
   },[])
 
@@ -84,6 +88,11 @@ function Flow() {
       localStorage.setItem("edges",JSON.stringify(edges))
     }
   },[edges])
+  useEffect(()=>{
+    if(scrns){
+      localStorage.setItem("screens",JSON.stringify(scrns))
+    }
+  },[scrns])
 
 
 
@@ -144,6 +153,8 @@ function Flow() {
     event.dataTransfer.effectAllowed = "move";
   };
 
+  const getscrn =()=> scrn
+
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -165,27 +176,26 @@ function Flow() {
 
       const newNode = {
         id: type == "Start" ? "start" : "node_"+Math.random(),
-        type,
-        position,
       };
 
       const newTextNode={
+        type,
+        position,
         ...newNode,
-        data: { onChange: onChange , text: "" ,id:newNode.id},
+        data: { onChange: onChange , text: "" ,id:newNode.id ,"screen":scrn},
       }
 
       setNodes((nds) => nds.concat(newTextNode));
     },
-    [reactFlowInstance]
+    [reactFlowInstance,scrn]
   );
-
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
   const copyToClipBoard=()=>{
-    const selectedNodes= nodes.filter(node=>node.selected==true)
+    const selectedNodes= nodes.filter(node=>node.selected==true&&node.data.screen==scrn)
     navigator.clipboard.writeText(JSON.stringify(selectedNodes));
   }
 
@@ -257,14 +267,39 @@ function Flow() {
         setLeftMenu(true)
       }
   }
+
+  const [filterNodes,setFilterNodes]=useState([])
+  useEffect(() => {
+    setFilterNodes(nodes.filter((node)=>node.data.screen==scrn ))
+
+    if(scrn!="app"){
+      setFilterNodes(p=>p.filter(node=>node.type!="Start"))
+    }
+  }, [nodes])
+  useEffect(() => {
+    setFilterNodes(nodes.filter((node)=>node.data.screen==scrn ))
+
+    if(scrn!="app"){
+      setFilterNodes(p=>p.filter(node=>node.type!="Start"))
+    }
+  }, [scrn,nodes])
+  
+
+
+
   return (
     <NodesContext.Provider value={{ nodes, setNodes, onNodesChange,edges, setEdges, onEdgesChange,display,setDisplay }}>
       <div className="flex flex-col w-screen h-screen ">
 
         <div className="w-full bg-white border-b flex px-4 gap-1 ">
-          <button className="px-4 py-2 mt-1 rounded-t-xl border bg-blue-400 text-white">App</button>
-          <button className="px-4 py-2 mt-1 rounded-t-xl border ">homepage</button>
-          <button className="px-8 py-2 mt-1 rounded-t-xl border  ">+</button>
+          {
+            scrns.map((s,key)=>{
+              return(
+                <button key={key} onClick={()=>{setScrn(s)}} className={"px-4 py-1 mt-4 rounded-t-xl border "+(s==scrn&&" bg-blue-400 text-white")}>{s}</button>
+              )
+            })
+          }
+          <button onClick={()=>setScrns(p=>p.concat(prompt("name of the screen!")))} className="px-8 py-1 mt-4 rounded-t-xl border  ">+</button>
         </div>
 
         <ReactFlowProvider >
@@ -285,11 +320,11 @@ function Flow() {
             <NodeCats HandleCatSelect={HandleCatSelect} catSelected={catSelected}/>
             {
               leftMenu &&
-              <NodeBar catSelected={catSelected} onDragStart={onDragStart}/>
+              <NodeBar scrn={scrn} catSelected={catSelected} onDragStart={onDragStart}/>
             }
             <ReactFlow
               className="resize horizontal flex-1 min-w-[800px] "
-              nodes={nodes}
+              nodes={filterNodes}
               edges={edges}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
