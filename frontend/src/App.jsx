@@ -323,7 +323,7 @@ function Flow() {
               <NodeBar scrn={scrn} catSelected={catSelected} onDragStart={onDragStart}/>
             }
             <ReactFlow
-              className="resize horizontal flex-1 min-w-[800px] "
+              className="resize horizontal border-x-[2px] flex-1 min-w-[800px] "
               nodes={filterNodes}
               edges={edges}
               onNodesChange={onNodesChange}
@@ -346,7 +346,7 @@ function Flow() {
             >
               <Controls className="bg-white" />
               <MiniMap zoomable pannable className="bg-gray-400" />
-              <Background className="bg-transparent" color="#ddd" variant={"lines"} />
+              <Background className="bg-[#fcfcfd]" color="#888" variant={"dots"} />
             </ReactFlow>
             <button onClick={()=>setRightMenu(p=>!p)} className="absolute p-2 rounded-md right-2 top-14 text-white bg-blue-400 ">
               {
