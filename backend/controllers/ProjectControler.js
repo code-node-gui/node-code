@@ -40,7 +40,7 @@ const createProject= async(req,res)=>{
             description
         })
         let filePath = './projects/'+project._id+'.txt';
-        let body = '{"edges":[],"nodes":[],"screens":["game"]}'
+        let body = '{"edges":[],"nodes":[],"screens":["app"]}'
         fs.writeFile(filePath, body, (err) => {
             if (err) {
                 console.log('Error saving');
@@ -100,8 +100,17 @@ const updateProject = async (req,res)=>{
 
 // save data of project
 const saveProject= async(req,res)=>{
-    const {data} = req.body
+    const {data,title} = req.body
     const {id}=req.params
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error:"no such project"})
+    }
+
+    await Project.findOneAndUpdate({_id:id},{
+        title
+    })
+
     try{
 
         let filePath = './projects/'+id+'.txt';

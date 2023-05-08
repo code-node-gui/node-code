@@ -1,6 +1,6 @@
 import { useEdgesState, useNodesState } from "reactflow";
 import { NodesContext } from "./context/NodesContext";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import WorkSpace from "./screens/WorkSpace";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Profile from "./screens/Profile";
@@ -44,6 +44,12 @@ function Flow() {
   };
 
 
+  useMemo(()=>{
+    let getProject= JSON.parse(localStorage.getItem("currentProject"));
+    if(getProject){
+      setCurrentProject(getProject)
+    }
+  },[])
 
   return (
     <NodesContext.Provider value={value}>

@@ -9,6 +9,7 @@ function ProjectCart({project}) {
     const { currentProject,setCurrentProject }=useContext(NodesContext);
     const openthis = ()=>{
             setCurrentProject(project)
+            localStorage.setItem("currentProject",JSON.stringify(project))
             api.get("/projects/get-data/"+project._id).then((res)=>{
                 localStorage.setItem("edges",JSON.stringify(res.data?.edges))
                 localStorage.setItem("nodes",JSON.stringify(res.data?.nodes))

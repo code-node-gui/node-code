@@ -61,6 +61,7 @@ function WorkSpace() {
   const { nodes, setNodes, edges ,setEdges , onEdgesChange, onNodesChange, display, setDisplay,currentProject } =
     useContext(NodesContext);
 
+    const [title , setTitle ]= useState(currentProject.title)
   const edgeUpdateSuccessful = useRef(true);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
@@ -293,7 +294,8 @@ function WorkSpace() {
 
   const saveProject = ()=>{
     api.post("/projects/save-data/"+currentProject._id,{
-      data:JSON.stringify({edges,nodes,screens:scrns})
+      data:JSON.stringify({edges,nodes,screens:scrns}),
+      title,
     }).then((res)=>{
     })
   }
@@ -323,7 +325,7 @@ function WorkSpace() {
           <button onClick={()=>setScrns(p=>p.concat(prompt("name of the screen!")))} className="px-8 py-1 mt-2 rounded-t-xl border  ">+</button>
         </div>
         <div className="flex h-full items-center gap-2 px-2 ">
-          <input value={currentProject._id} className="border outline-blue-400 py-1 rounded-lg px-2" ></input>
+          <input value={title} onChange={(e)=>setTitle(e.target.value)} className="border outline-blue-400 py-1 rounded-lg px-2" ></input>
           <button onClick={saveProject} className="bg-blue-400 rounded-lg py-2 flex gap-2 text-white px-4">
             <Save></Save> save</button>
         </div>
