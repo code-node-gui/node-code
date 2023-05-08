@@ -2,7 +2,7 @@
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: "https://ayshadashboard.com/api"
+    baseURL: "https://localhost:4000/api/"
 })
 
 export default api

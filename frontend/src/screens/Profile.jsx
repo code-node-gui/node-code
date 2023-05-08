@@ -1,10 +1,21 @@
 import { AddRounded, MoreHorizRounded, PlusOneRounded, SearchOffRounded, SearchRounded } from "@mui/icons-material";
 import { Avatar, Button, IconButton  } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from 'react-router-dom';
 import List from "../components/List"
+import { NodesContext } from "../context/NodesContext";
+import api from "../assets/api";
 
 function Profile() {
+  
+  const { projects,setProjects } =
+    useContext(NodesContext);
+
+  useEffect(() => {
+  }, [])
+  
+
+
   return (
     <div className="bg-gray-50 min-h-[100vh]">
 
