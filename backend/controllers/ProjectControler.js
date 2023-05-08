@@ -65,6 +65,11 @@ const deleteProject = async(req,res)=>{
         return res.status(404).json({error:"no such project"})
     }
 
+    let filePath = './projects/'+id+'.txt';
+    fs.unlink(filePath, function(){
+        console.log("File was deleted") // Callback
+    });
+
     const project = await Project.findOneAndDelete({_id : id})
 
     if(!project){

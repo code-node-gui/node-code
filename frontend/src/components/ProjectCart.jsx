@@ -32,7 +32,7 @@ function ProjectCart({project}) {
                                 <p className="text-sm text-gray-500">{project.description}</p>
                                 </div>
                                 <div className="text-gray-600">
-                                        <List project={project}/>
+                                        <List openthis={openthis} project={project}/>
                                 </div>
                                 </div>
                                 <p className="text-sm text-gray-500 text-end">{project.updatedAt.slice(0,10)}</p>

@@ -7,7 +7,7 @@ import { ArrowForwardIosRounded, ArrowForwardRounded, ContentCopyRounded, Delete
 import api from '../assets/api';
 import { NodesContext } from '../context/NodesContext';
 
-export default function BasicMenu({project}) {
+export default function BasicMenu({project,openthis}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -52,7 +52,7 @@ export default function BasicMenu({project}) {
         }}
         sx={{Width:300}}
       >
-        <MenuItem onClick={handleClose}> 
+        <MenuItem onClick={openthis}> 
         <ListItemIcon><ArrowForwardRounded/></ListItemIcon>
         <ListItemText>Open</ListItemText>
          </MenuItem>
