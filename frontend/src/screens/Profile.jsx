@@ -1,20 +1,21 @@
 import { AddRounded, MoreHorizRounded, PlusOneRounded, SearchOffRounded, SearchRounded } from "@mui/icons-material";
 import { Avatar, Button, IconButton  } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Link } from 'react-router-dom';
 import List from "../components/List"
 import { NodesContext } from "../context/NodesContext";
 import api from "../assets/api";
+import NewProject from "../components/NewProject";
 
 function Profile() {
   
-  const { projects,setProjects } =
-    useContext(NodesContext);
-
-  useEffect(() => {
-  }, [])
+  const [ projects,setProjects ]=useState([]);
   
-
+  useMemo(() => {
+    api.get("/projects").then((res)=>{
+        setProjects(res.data);
+    })
+  }, [])
 
   return (
     <div className="bg-gray-50 min-h-[100vh]">
@@ -59,10 +60,7 @@ function Profile() {
                 <input placeholder="search" className="outline-none"></input>
                 <SearchRounded/>
                 </div>
-                <button className="px-2 pr-4 py-2 bg-blue-400 flex gap-1 text-white rounded-xl">
-                    <AddRounded/>
-                    new
-                </button>
+                <NewProject/>
             </div>
 
 
@@ -71,22 +69,21 @@ function Profile() {
 
 
                 {
-                    new Array(3).fill("hello").map((e)=>{
+                    projects && projects.map((project)=>{
                         return (
-                <div className="p-4 rounded-xl shadow-sm border duration-150 gap-4 bg-white flex ">
-                    <Avatar sx={{background:"rgb(96 165 250)"}}>:)</Avatar>
-                    <div>
-                    <Link to="/work-space">
-                      <h1>name of the project</h1>
-                    </Link>
-                    <p className="text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio beatae exercitationem distincti</p>
-                    </div>
-                    <div className="text-gray-600">
-                            <List/>
-                        {/* </IconButton> */}
-                    </div>
-                </div>
-                
+                            <div key={project._id} className="p-4 rounded-xl shadow-sm border duration-150 gap-4 bg-white flex ">
+                                <Avatar sx={{background:"rgb(96 165 250)"}}>:)</Avatar>
+                                <div>
+                                <Link to="/work-space">
+                                <h1>{project.title}</h1>
+                                </Link>
+                                <p className="text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio beatae exercitationem distincti</p>
+                                </div>
+                                <div className="text-gray-600">
+                                        <List/>
+                                </div>
+                            </div>
+                    
                         )
                     })
 
