@@ -1,12 +1,27 @@
-const express = require("express");
 require("dotenv").config();
+const express = require("express");
+const projects = require("./routes/projects")
+const mongoose = require("mongoose")
 
 const app = express();
 
-app.get("/",(req,res)=>{
-    res.json({msg:"welcome to the app"})
+app.use(express.json())
+
+app.use((req,res,next)=>{
+  console.log(req.path,req.method)
+  next()
 })
 
-app.listen(process.env.PORT,()=>{
-  console.log('server running')
+
+
+
+app.use("/api/projects/",projects)
+
+mongoose.connect(process.env.MONG_URI).then(()=>{
+  console.log("connecting done")
+  app.listen(process.env.PORT,()=>{
+    console.log('server running')
+  })
+}).catch((err)=>{
+  console.log(err)
 })
