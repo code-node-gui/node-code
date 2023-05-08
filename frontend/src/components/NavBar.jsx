@@ -27,7 +27,7 @@ function NavBar({screen,setScreen}) {
                 <FileUploadRoundedIcon/>
             </Button> */}
         </div>
-        <Avatar>TS</Avatar>
+        <Avatar src="https://avatars.githubusercontent.com/u/115560200?s=400&u=724c093e867f4a640be09692400a33f2049ff121&v=4"> TS</Avatar>
     </div>
   )
 }
