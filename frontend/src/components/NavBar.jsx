@@ -1,5 +1,5 @@
 import { FavoriteBorderOutlined } from '@mui/icons-material'
-import { Avatar, Button } from '@mui/material'
+import { Avatar, Button, IconButton } from '@mui/material'
 import React from 'react'
 import ElectricBoltRoundedIcon from '@mui/icons-material/ElectricBoltRounded';
 import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
@@ -7,6 +7,7 @@ import BrushRoundedIcon from '@mui/icons-material/BrushRounded';
 import ExtensionRoundedIcon from '@mui/icons-material/ExtensionRounded';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import { Link } from 'react-router-dom';
 function NavBar({screen,setScreen}) {
   return (
     <div className='flex justify-between items-center flex-col p-3'>
@@ -27,7 +28,11 @@ function NavBar({screen,setScreen}) {
                 <FileUploadRoundedIcon/>
             </Button> */}
         </div>
-        <Avatar>TS</Avatar>
+        <Link to={"/"}>
+        <IconButton >
+        <Avatar src="https://avatars.githubusercontent.com/u/115560200?v=4">TS</Avatar>
+        </IconButton>
+        </Link>
     </div>
   )
 }
