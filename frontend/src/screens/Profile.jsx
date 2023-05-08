@@ -1,6 +1,8 @@
 import { AddRounded, MoreHorizRounded, PlusOneRounded, SearchOffRounded, SearchRounded } from "@mui/icons-material";
-import { Avatar, Button, IconButton } from "@mui/material";
+import { Avatar, Button, IconButton  } from "@mui/material";
 import React from "react";
+import { Link } from 'react-router-dom';
+import List from "../components/List"
 
 function Profile() {
   return (
@@ -11,7 +13,7 @@ function Profile() {
 
 
 
-        <div className=" w-[500px] bg-white  flex flex-col rounded-xl p-4  shadow-lg h-fit">
+        <div className=" w-[500px] bg-white  flex flex-col rounded-xl p-4 border shadow-sm h-fit">
           <div className="flex  gap-4  ">
             <IconButton>
               <Avatar
@@ -23,11 +25,11 @@ function Profile() {
               <h3 className="text-lg">tchisama</h3>
               <h3 className="text-sm text-gray-700">#tchi-sama</h3>
             </div>
-                    <div className="text-gray-600 ">
-                        <IconButton>
-                            <MoreHorizRounded/>
-                        </IconButton>
-                    </div>
+                  <div className="text-gray-600 ">
+                      <IconButton>
+                          <MoreHorizRounded/>
+                      </IconButton>
+                  </div>
           </div>
             <p className="text-sm text-gray-700 p-2">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio
@@ -58,19 +60,19 @@ function Profile() {
 
 
                 {
-                    new Array(100).fill("hello").map((e)=>{
+                    new Array(3).fill("hello").map((e)=>{
                         return (
-
-                <div className="p-4 rounded-xl shadow-md gap-4 bg-white flex cursor-pointer hover:bg-blue-50">
-                    <Avatar sx={{background:"rgb(96 165 250)"}}>NP</Avatar>
+                <div className="p-4 rounded-xl shadow-sm border duration-150 gap-4 bg-white flex ">
+                    <Avatar sx={{background:"rgb(96 165 250)"}}>:)</Avatar>
                     <div>
-                    <h1>name of the project</h1>
+                    <Link to="/work-space">
+                      <h1>name of the project</h1>
+                    </Link>
                     <p className="text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio beatae exercitationem distincti</p>
                     </div>
                     <div className="text-gray-600">
-                        <IconButton>
-                            <MoreHorizRounded/>
-                        </IconButton>
+                            <List/>
+                        {/* </IconButton> */}
                     </div>
                 </div>
                 
