@@ -68,10 +68,10 @@ export default function NewProject() {
                 <input placeholder="title" value={title} onChange={(e)=>{setTitle(e.target.value)}} className="mt-2 outline-blue-400  rounded-xl text-gray-600  border flex items-center px-2 bg-white py-2 w-[500px]"></input>
                 <textarea placeholder="description"  value={description} onChange={(e)=>{setDescription(e.target.value)}} className="mt-2 outline-blue-400 w-full rounded-xl text-gray-600  border flex items-center px-2 bg-white py-2 "></textarea>
                 <div className='flex gap-2 mt-2'>
-                    <button onClick={()=>setSecurity("public")} className={"px-4 py-2  flex gap-1 text-white rounded-xl "+(security=="public"?"bg-blue-400":"bg-gray-400")}>
+                    <button onClick={()=>setSecurity("public")} className={"px-4 py-2  flex gap-1 text-white rounded-xl "+(security=="public"?"bg-blue-300":"bg-gray-400")}>
                         {security=="public"?<CheckCircle></CheckCircle>:<Circle></Circle>}
                         Public</button>
-                    <button onClick={()=>setSecurity("privet")} className={"px-4 py-2  flex gap-1 text-white rounded-xl "+(security=="privet"?"bg-blue-400":"bg-gray-400")}>
+                    <button onClick={()=>setSecurity("privet")} className={"px-4 py-2  flex gap-1 text-white rounded-xl "+(security=="privet"?"bg-red-300":"bg-gray-400")}>
                         {security=="privet"?<CheckCircle></CheckCircle>:<Circle></Circle>}
                         Privet</button>
                 </div>

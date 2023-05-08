@@ -8,6 +8,7 @@ import ExtensionRoundedIcon from '@mui/icons-material/ExtensionRounded';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import { Link } from 'react-router-dom';
+import GoProfile from './GoProfile';
 function NavBar({screen,setScreen}) {
   return (
     <div className='flex justify-between items-center flex-col p-3'>
@@ -28,11 +29,7 @@ function NavBar({screen,setScreen}) {
                 <FileUploadRoundedIcon/>
             </Button> */}
         </div>
-        <Link to={"/"}>
-        <IconButton >
-        <Avatar src="https://avatars.githubusercontent.com/u/115560200?v=4">TS</Avatar>
-        </IconButton>
-        </Link>
+        <GoProfile/>
     </div>
   )
 }
