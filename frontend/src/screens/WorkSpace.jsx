@@ -27,6 +27,8 @@ import NodeCats from "../components/nodeCats.jsx";
 import NavBar from "../components/NavBar.jsx";
 import { nodeType } from "../assets/nodesArray.jsx";
 import { NodesContext } from "../context/NodesContext.jsx";
+import { Save, SaveAltRounded } from "@mui/icons-material";
+import api from "../assets/api.js";
 
 const rfStyle = {
   backgroundColor: "#f0f0f0",
@@ -34,9 +36,9 @@ const rfStyle = {
 
 
 function componentDidMount() {
-  document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-  });
+  // document.addEventListener('contextmenu', (e) => {
+  //   e.preventDefault();
+  // });
 };
 
 
@@ -56,7 +58,7 @@ const nodeTypes = nodeType
 
 function WorkSpace() {
 
-  const { nodes, setNodes, edges ,setEdges , onEdgesChange, onNodesChange, display, setDisplay } =
+  const { nodes, setNodes, edges ,setEdges , onEdgesChange, onNodesChange, display, setDisplay,currentProject } =
     useContext(NodesContext);
 
   const edgeUpdateSuccessful = useRef(true);
@@ -193,7 +195,7 @@ function WorkSpace() {
   }, []);
 
   const copyToClipBoard=()=>{
-    const selectedNodes= nodes.filter(node=>node.selected==true&&node.data.screen==scrn)
+    const selectedNodes= nodes.filter(node=>node.selected==true&&node.data?.screen==scrn)
     navigator.clipboard.writeText(JSON.stringify(selectedNodes));
   }
 
@@ -268,14 +270,14 @@ function WorkSpace() {
 
   const [filterNodes,setFilterNodes]=useState([])
   useEffect(() => {
-    setFilterNodes(nodes.filter((node)=>node.data.screen==scrn ))
+    setFilterNodes(nodes.filter((node)=>node.data?.screen==scrn ))
 
     if(scrn!="app"){
       setFilterNodes(p=>p.filter(node=>node.type!="Start"))
     }
   }, [nodes])
   useEffect(() => {
-    setFilterNodes(nodes.filter((node)=>node.data.screen==scrn ))
+    setFilterNodes(nodes.filter((node)=>node.data?.screen==scrn ))
 
     if(scrn!="app"){
       setFilterNodes(p=>p.filter(node=>node.type!="Start"))
@@ -285,18 +287,46 @@ function WorkSpace() {
 
 
 
+
+
+
+
+  const saveProject = ()=>{
+    api.post("/projects/save-data/"+currentProject._id,{
+      data:JSON.stringify({edges,nodes,screens:scrns})
+    }).then((res)=>{
+    })
+  }
+
+
+
+
+
+
+
+
+
+
+
   return (
       <div className="flex flex-col w-screen h-screen ">
+        <div className="flex justify-between  border-b h-12">
 
-        <div className="w-full bg-white border-b flex px-4 gap-1 ">
+        <div className="w-full bg-white  flex px-4 gap-1 ">
           {
             scrns.map((s,key)=>{
               return(
-                <button key={key} onClick={()=>{setScrn(s)}} className={"px-4 py-1 mt-4 rounded-t-xl border "+(s==scrn&&" bg-blue-400 text-white")}>{s}</button>
+                <button key={key} onClick={()=>{setScrn(s)}} className={"px-4 py-1 mt-2 rounded-t-xl border "+(s==scrn&&" bg-blue-400 text-white")}>{s}</button>
               )
             })
           }
-          <button onClick={()=>setScrns(p=>p.concat(prompt("name of the screen!")))} className="px-8 py-1 mt-4 rounded-t-xl border  ">+</button>
+          <button onClick={()=>setScrns(p=>p.concat(prompt("name of the screen!")))} className="px-8 py-1 mt-2 rounded-t-xl border  ">+</button>
+        </div>
+        <div className="flex h-full items-center gap-2 px-2 ">
+          <input value={currentProject._id} className="border outline-blue-400 py-1 rounded-lg px-2" ></input>
+          <button onClick={saveProject} className="bg-blue-400 rounded-lg py-2 flex gap-2 text-white px-4">
+            <Save></Save> save</button>
+        </div>
         </div>
 
         <ReactFlowProvider >

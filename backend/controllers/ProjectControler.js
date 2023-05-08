@@ -1,5 +1,8 @@
 const Project = require("../models/Project")
 const mongoose = require("mongoose")
+const fs = require('fs')
+
+
 // get all projects
 
 const getAllProjects = async(req,res)=>{
@@ -36,6 +39,16 @@ const createProject= async(req,res)=>{
             security,
             description
         })
+        let filePath = './projects/'+project._id+'.txt';
+        let body = '{"edges":[],"nodes":[],"screens":["game"]}'
+        fs.writeFile(filePath, body, (err) => {
+            if (err) {
+                console.log('Error saving');
+                throw err;
+            } else {
+                console.log('It\'s saved!');
+            }
+        });
         res.status(200).json(project)
     }catch (error){
         res.status(400).json({error:error.message})
@@ -83,6 +96,53 @@ const updateProject = async (req,res)=>{
 }
 
 
+
+
+// save data of project
+const saveProject= async(req,res)=>{
+    const {data} = req.body
+    const {id}=req.params
+    try{
+
+        let filePath = './projects/'+id+'.txt';
+        fs.writeFile(filePath, data, (err) => {
+            if (err) {
+                console.log('Error saving');
+                throw err;
+            } else {
+                console.log('It\'s saved!');
+            }
+        });
+        res.status(200).json({msg:"done"})
+    }catch (error){
+        res.status(400).json({error:error.message})
+    }
+}
+
+
+
+//get a project data
+const getDataProject = async(req,res)=>{
+    const {id}=req.params
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error:"no such project"})
+    }
+    let filePath = './projects/'+id+'.txt';
+    fs.readFile(filePath, 'utf8', function( err, data ){
+        if ( err ) {
+            console.log( 'error', err );
+        } else {
+            res.status(200).json(JSON.parse(data))
+        }
+    }); 
+
+}
+
+
+
+
+
 module.exports = {
-    createProject,getAllProjects,getProject,deleteProject, updateProject
+    createProject,getAllProjects,getProject,deleteProject, updateProject,saveProject,getDataProject
 }

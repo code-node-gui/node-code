@@ -23,6 +23,7 @@ function Flow() {
   const [display, setDisplay] = useState([]);
   const [projects,setProjects]=useState([]);
   const [updateProjects,setUpdateProjects]=useState(0);
+  const [currentProject,setCurrentProject]=useState("");
 
 
   const value = {
@@ -38,6 +39,8 @@ function Flow() {
     setProjects,
     updateProjects,
     setUpdateProjects,
+    currentProject,
+    setCurrentProject
   };
 
 
