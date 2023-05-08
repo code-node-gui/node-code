@@ -28,11 +28,13 @@ const getProject = async(req,res)=>{
 
 // create new project
 const createProject= async(req,res)=>{
-    const {title,owner} = req.body
+    const {title,owner,security,description} = req.body
     try{
         const project = await Project.create({
             title,
-            owner
+            owner,
+            security,
+            description
         })
         res.status(200).json(project)
     }catch (error){

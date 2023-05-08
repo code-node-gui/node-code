@@ -11,6 +11,14 @@ const projectSchema = new Schema({
     owner:{
         type:String,
         required:true
+    },
+    security:{
+        type:String,
+        required:true
+    },
+    description:{
+        type:String,
+        default:"u can add the description later :)"
     }
 },{timestamps:true})
 

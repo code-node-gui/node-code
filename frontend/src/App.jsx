@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import WorkSpace from "./screens/WorkSpace";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Profile from "./screens/Profile";
+import api from "./assets/api";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,8 @@ function Flow() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [display, setDisplay] = useState([]);
-  const [Projects,setProjects]=useState([]);
+  const [projects,setProjects]=useState([]);
+  const [updateProjects,setUpdateProjects]=useState(0);
 
 
   const value = {
@@ -32,9 +34,13 @@ function Flow() {
     onEdgesChange,
     display,
     setDisplay,
-    Projects,
-    setProjects
+    projects,
+    setProjects,
+    updateProjects,
+    setUpdateProjects,
   };
+
+
 
   return (
     <NodesContext.Provider value={value}>

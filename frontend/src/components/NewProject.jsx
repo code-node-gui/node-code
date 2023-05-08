@@ -7,14 +7,34 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { AddRounded, CheckCircle, Circle } from '@mui/icons-material';
+import { useState } from 'react';
+import api from '../assets/api';
+import { NodesContext } from '../context/NodesContext';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function NewProject() {
-  const [open, setOpen] = React.useState(false);
-  const [security,setSecurity]=React.useState("public")
+  const [open, setOpen] =useState(false);
+  const [security,setSecurity]=useState("public");
+  const [title,setTitle]=useState("")
+  const [description,setDescription]=useState("")
+
+  const { setUpdateProjects }=React.useContext(NodesContext);
+
+
+  const create = ()=>{
+    api.post("/projects",{
+        title,
+        description,
+        security,
+        owner:12345678
+    }).then((res)=>{
+        handleClose();
+        setUpdateProjects(p=>p+1)
+    })
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -22,8 +42,10 @@ export default function NewProject() {
 
   const handleClose = () => {
     setOpen(false);
+    setTitle("")
+    setDescription("")
+    setSecurity("public")
   };
-
   return (
     <div>
 
@@ -43,8 +65,8 @@ export default function NewProject() {
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
           </DialogContentText>
-                <input placeholder="name" className="mt-2 outline-blue-400  rounded-xl text-gray-600  border flex items-center px-2 bg-white py-2 w-[500px]"></input>
-                <textarea placeholder="description" className="mt-2 outline-blue-400 w-full rounded-xl text-gray-600  border flex items-center px-2 bg-white py-2 "></textarea>
+                <input placeholder="title" value={title} onChange={(e)=>{setTitle(e.target.value)}} className="mt-2 outline-blue-400  rounded-xl text-gray-600  border flex items-center px-2 bg-white py-2 w-[500px]"></input>
+                <textarea placeholder="description"  value={description} onChange={(e)=>{setDescription(e.target.value)}} className="mt-2 outline-blue-400 w-full rounded-xl text-gray-600  border flex items-center px-2 bg-white py-2 "></textarea>
                 <div className='flex gap-2 mt-2'>
                     <button onClick={()=>setSecurity("public")} className={"px-4 py-2  flex gap-1 text-white rounded-xl "+(security=="public"?"bg-blue-400":"bg-gray-400")}>
                         {security=="public"?<CheckCircle></CheckCircle>:<Circle></Circle>}
@@ -58,7 +80,7 @@ export default function NewProject() {
         <button onClick={handleClose} className="px-4 py-2 bg-gray-400 flex gap-1 text-white rounded-xl">
             Close
         </button>
-        <button onClick={handleClose} className="px-4 py-2 bg-blue-400 flex gap-1 text-white rounded-xl">
+        <button onClick={create} className="px-4 py-2 bg-blue-400 flex gap-1 text-white rounded-xl">
             Create
         </button>
         </DialogActions>

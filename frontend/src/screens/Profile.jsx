@@ -6,16 +6,17 @@ import List from "../components/List"
 import { NodesContext } from "../context/NodesContext";
 import api from "../assets/api";
 import NewProject from "../components/NewProject";
+import ProjectCart from "../components/ProjectCart";
 
 function Profile() {
   
-  const [ projects,setProjects ]=useState([]);
+  const { projects,setProjects ,updateProjects }=useContext(NodesContext);
   
-  useMemo(() => {
+  useEffect(() => {
     api.get("/projects").then((res)=>{
         setProjects(res.data);
     })
-  }, [])
+  }, [updateProjects])
 
   return (
     <div className="bg-gray-50 min-h-[100vh]">
@@ -71,19 +72,7 @@ function Profile() {
                 {
                     projects && projects.map((project)=>{
                         return (
-                            <div key={project._id} className="p-4 rounded-xl shadow-sm border duration-150 gap-4 bg-white flex ">
-                                <Avatar sx={{background:"rgb(96 165 250)"}}>:)</Avatar>
-                                <div>
-                                <Link to="/work-space">
-                                <h1>{project.title}</h1>
-                                </Link>
-                                <p className="text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio beatae exercitationem distincti</p>
-                                </div>
-                                <div className="text-gray-600">
-                                        <List/>
-                                </div>
-                            </div>
-                    
+                            <ProjectCart key={project._id} project={project} />
                         )
                     })
 

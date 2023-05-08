@@ -4,8 +4,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { IconButton, ListItemIcon, ListItemText } from '@mui/material';
 import { ArrowForwardIosRounded, ArrowForwardRounded, ContentCopyRounded, DeleteForeverRounded, MoreHorizRounded, OpenInFull, PlayArrowRounded, StartRounded } from '@mui/icons-material';
+import api from '../assets/api';
+import { NodesContext } from '../context/NodesContext';
 
-export default function BasicMenu() {
+export default function BasicMenu({project}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -14,6 +16,19 @@ export default function BasicMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const { setUpdateProjects }=React.useContext(NodesContext);
+
+
+  const deleteProject = ()=>{
+    api.delete("/projects/"+project._id,{
+    }).then((res)=>{
+        handleClose();
+        setUpdateProjects(p=>p+1)
+    })
+  }
+
+
 
   return (
     <div>
@@ -49,7 +64,7 @@ export default function BasicMenu() {
         <ListItemIcon><ContentCopyRounded/></ListItemIcon>
         <ListItemText>Duplicate</ListItemText>
          </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={deleteProject}>
         <ListItemIcon><DeleteForeverRounded/></ListItemIcon>
         <ListItemText>Delete</ListItemText>
         </MenuItem>
