@@ -127,7 +127,7 @@ function Output({screen}) {
           index < compiling(getNode(node, "times"), loopVar, fun);
           index++
         ) {
-          compiling(getNode(node, "do"), index, fun);
+          compiling(getNode(node, "do"), {...loopVar,[nodes[node].data.value]:index}, fun);
         }
       } else if (nodes[node]?.type == "ReturningLoop") {
         // for (
@@ -343,17 +343,15 @@ function Output({screen}) {
           ...compiling(getNode(node, "next"), loopVar, fun),
         };
       } else if (nodes[node]?.type == "CreateArray") {
-        let a = [Array.isArray(compiling(getNode(node, "value"), loopVar, fun))?[...compiling(getNode(node, "value"), loopVar, fun)]:[]].flat(
-          Infinity
-        );
+        let a = [Array.isArray(compiling(getNode(node, "value"), loopVar, fun))?[...compiling(getNode(node, "value"), loopVar, fun)]:[]].flat(1)
         return a;
       } else if (nodes[node]?.type == "ArrayItem") {
         let a = [compiling(getNode(node, "value", loopVar, fun)) ||nodes[node]?.data?.value];
         let b = compiling(getNode(node, "next", loopVar, fun));
         if (b) {
-          return [a, b];
+          return [...a,...b];
         } else {
-          return [a];
+          return a;
         }
       } else if (nodes[node]?.type == "AddToArray") {
         window[nodes[node]?.data.array].push( compiling(getNode(node, "value"), loopVar, fun) || nodes[node]?.data.value)
@@ -377,7 +375,7 @@ function Output({screen}) {
         );
         compiling(getNode(node, "next"), loopVar, fun);
       } else if (nodes[node]?.type == "LoopIndex") {
-        return loopVar;
+        return loopVar[nodes[node].data.value];
       } else if (nodes[node]?.type == "RandomNum") {
 
         const randomNumber=(b=0, a=1)=> {

@@ -95,7 +95,6 @@ export default [
     { node: <DivNode list={true} />, type: "Div", cat:"math" },
     { node: <RandomNum list={true} />, type: "RandomNum", cat:"math" },
 
-
     { node: <CreateVar list={true} />, type: "CreateVar",cat:"variables" },
     { node: <SetVar list={true} />, type: "SetVar",cat:"variables" },
     { node: <GetVar list={true} />, type: "GetVar",cat:"variables" },
